@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>beastie</title>
+
+	  	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<link rel="stylesheet" href="{{ STATIC_URL }}style.css">
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script>
+			// Slider jQuery
+			$(function() {
+				$( "#geography_slider" ).slider();
+				$( "#objectName_slider" ).slider();
+				$( "#material_slider" ).slider();
+				$( "#magic_slider" ).slider();
+			});
+	  	</script>
+	</head>
+
+	<body>
+		{% load humanize %}
+		<!-- Header -->
+		<div style="padding: 60px 30px">
+			<div style="border: 2px solid; padding: 10px; overflow: auto">
+				<div style="float: left">
+					<img src="{{ baseObj.img }}" height="300" style="padding:">
+				</div>
+				<div style="clear:float">
+					<span style="float:left; padding-left: 10px; margin: 0px; max-width:35%; ">
+						<h3><i> {{ baseObj.title 		}} </i></h3>
+						<h3>	{{ baseObj.material 	}} </h3>
+						<h3>	{{ baseObj.objectName 	}} </h3>
+						<h3><a href='{{baseObj.url }}'>View online</a></h3>
+					</span>
+				</div>
+
+				{% include 'sliders.html' %}
+			</div>
+			<!-- Page divider -->
+			<div style="clear:both; margin: 30px 0px 30px"/>
+
+			<!-- Images  -->
+			<div id="thumbs">
+				<!-- TODO :: This should call a template for objects in reponse -->
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
+
+				<span class="stretch"></span>
+			</div>​
+		</div>
+	</body>
+</html>
