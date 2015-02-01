@@ -1,0 +1,4 @@
+Django==1.7.4
+humanize==0.5.1
+numpy==1.9.1
+scandir==0.9

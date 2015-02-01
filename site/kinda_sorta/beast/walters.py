@@ -6,6 +6,8 @@ Class for interacting with Walters API
 from urllib.request import urlopen
 from urllib.error import HTTPError
 import json
+import os
+from django.conf import settings
 
 class walters():
 
