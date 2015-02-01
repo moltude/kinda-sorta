@@ -1,0 +1,189 @@
+
+
+.page-center-title-div {
+  width: 50%;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  /* */
+  	/*margin-top:-50px;  half of height */
+  	position: absolute;
+	left: 25%;
+	top: 40%;
+	margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.page-center-span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+}
+
+.page-title {
+	font-family: Calibri;
+	font-size: 80px;
+	font-style: normal;
+	font-variant: normal;
+	letter-spacing: 5px;
+	font-weight: 100;
+	line-height: 49px;
+	color: white;
+	
+	text-align: center;
+}
+
+.page-center-div {
+	width: 50%;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
+  /*margin-top:-50px;  half of height */
+	position: absolute;
+	left: 25%;
+	top: 50%;
+}
+
+.search-box {
+	width: 70%;
+	height: 40px;
+	font-size: 28px;
+	vertical-align: middle;
+}
+
+input[type=submit] {
+	font-family: Calibri;
+	font-style: normal;
+	font-variant: normal;
+	letter-spacing: 5px;
+	color: white;
+	vertical-align: middle;
+	font-size: 28px;
+	height: 46px;
+	padding:0px 15px; 
+	background:#ccc; 
+	border:0 none;
+    cursor:pointer;
+    /*-webkit-border-radius: 5px;*/
+    border-radius: 5px; 
+}
+
+h3 {
+	font-family: Calibri;
+	font-style: normal;
+	font-variant: normal;
+	font-size: 20pt;
+	font-weight: bold;
+	letter-spacing: 2px;
+	margin: 0px;
+
+}
+
+h3 a {
+	text-decoration:none;
+} 
+
+h3 a:visited {
+	color:#000000
+}
+
+.text {
+	/*margin: 10px;*/
+	font-family: Calibri;
+	font-style: normal;
+	font-variant: normal;
+	letter-spacing: 2px;
+	font-size: 16pt;
+
+.url {
+	font-size: 10pt;
+	color: blue
+}
+
+.table_header {
+	font-size: 9pt;
+	font-weight: bold;
+	text-align: center;
+	font-family: sans-serif;
+}
+
+.evenrow {
+	margin: 10px;
+	font-size: 10pt;
+	font-family: serif;
+}
+
+.oddrow {
+	background: rgba(204, 204, 204, 0.4);
+	margin: 10px;
+	font-size: 10pt;
+	font-family: serif;
+}
+
+#tabs { 
+	font-size: 10pt;
+	background: rgba(204, 204, 204, 0.1);
+}
+
+.ui-widget-header {
+	background: rgba(204, 204, 204, 0.0);	
+}
+
+.ui-widget-content {
+	border: 0px;
+}
+
+.ui-tabs-hide { 
+    display: none !important; 
+ }
+
+#footer { 
+	bottom: 0;
+	margin-top: 40px;
+	height: 40px
+}
+
+#bib_column {
+	width: 90%
+}
+
+#link_column {
+	width: 10%;
+	vertical-align: top;
+	text-align: right;
+}
+
+
+/* 
+CSS for evening distrubing imgaes 
+taken from 
+
+*/
+
+#thumbs {   
+    width: 540px;
+    margin-top:90px;
+    margin-left: auto; 
+    margin-right: auto;
+
+     text-align: justify;
+    -ms-text-justify: distribute-all-lines;
+    text-justify: distribute-all-lines;
+}
+#thumbs a {
+    vertical-align: top;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+}
+.stretch {
+    width: 100%;
+    display: inline-block;
+    font-size: 0;
+    line-height: 0
+}
+
+
+
+
