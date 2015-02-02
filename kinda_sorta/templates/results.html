@@ -11,8 +11,7 @@
 		<script>
 			// Slider jQuery
 			$(function() {
-				$( "#matSlide, #geoSlide, #nameSlide, #magicSlide" ).slider(
-				{	
+				$( "#matSlide, #geoSlide, #nameSlide, #magicSlide" ).slider({	
 					orientation: "horizontal",
 					min: 1,
 					max: 100,
@@ -21,9 +20,19 @@
 						var id = $(this).attr("name");
 						// works!
 						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );						
+            		},
+            		create: function( event, ui ) {
+            			var id = $(this).attr("name");
+						// works!
+						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );							
             		}
 				});
-				$( "#slider-value" ).html(  $('#matSlide, #geoSlide, #nameSlide, #magicSlide').slider('value') );
+
+				// Hard-coded because JQuery sucks and I can't figure out how to display intial value
+				$('span[id="slider-value"][name="material"]').html($("#matSlide").slider("value"));
+				$('span[id="slider-value"][name="objectName"]').html($("#nameSlide").slider("value"));
+				$('span[id="slider-value"][name="geography"]').html($("#geoSlide").slider("value"));
+				$('span[id="slider-value"][name="magic"]').html($("#magicSlide").slider("value"));
 			});
 	  	</script>
 	</head>
