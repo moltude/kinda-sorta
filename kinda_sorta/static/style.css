@@ -1,5 +1,12 @@
 
 
+.display {
+	float: right; 
+	width:260px; 
+	margin-top: 6px; 
+	display: inline-block;
+}
+
 .page-center-title-div {
   width: 50%;
   height: 100px;

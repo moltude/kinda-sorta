@@ -1,28 +1,37 @@
 <!-- Slider  -->
-<div style="float:right;padding-right: 30px; vertical-align: top; width: 425px">
+<div style="float:right; vertical-align: top; width: 425px">
 	<!-- Material/Medium -->
 	<div style="overflow: hidden; width: 100%">
 		<div class='text' style="float:left; padding-right:10px;  overflow: hidden;display: inline-block;">Material</div>
-		<div id="material_slider" style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
+		
+		<p>Your slider has a value of <span id="slider-value" name='material'></span></p>
+		
+		<div id="matSlide" name='material' style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>
 	</div>
 	<!-- Object Name -->
 	<div style="overflow: hidden; width: 100%">
 		<div class='text' style="float:left; padding-right:20px;  overflow: hidden;display: inline-block;">Object Name</div>
-		<div id="objectName_slider" style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
+		<div id="nameSlide" name='objectName' style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
 	</div>
 	<!-- Geography -->
 	<div style="overflow: hidden; width: 100%">
 		<div class='text' style="float:left; padding-right:20px;  overflow: hidden;display: inline-block;">Geography</div>
-		<div id="geography_slider" style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
+
+		<div id="geoSlide" name='geography' style="float:right; width:260px; margin-top: 6px; display: inline-block;"></div>	
 	</div>
 	<!-- Magic -->
 	<div style="overflow: hidden; width: 100%">
 		<div class='text' style="float:left; padding-right:20px;  overflow: hidden;display: inline-block;">Magic</div>
-		<div id="magic_slider" style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
+		<div id="magicSlide" name='magic' style="float: right; width:260px; margin-top: 6px; display: inline-block;"></div>	
 	</div>
 	<!-- Buttons -->
 	<div style="overflow: hidden; width: 100%; padding-top: 60px">
+		<!-- Requery with new slider values -->
 	    <input type="submit" value='Apply' style="float:right; padding-right:20px;  overflow: hidden;display: inline-block;" />
-	    <input type="submit" value='Start over' style="padding-right: 20px display: inline-block" />
+	    <!-- Go home -->
+	    <form action='/'>
+	    	<input type="submit" value='Start over' style="padding-right: 20px display: inline-block" />
+	    </form>
+	    
 	</div>	
 </div>

@@ -50,7 +50,7 @@ def results(request):
 				'material':data['Medium'],
 				'objectName':data['ObjectName'],
 				'url':data['ResourceURL'],
-				'img':data['Images'][0]['ImageURLs']['Medium']
+				'img':data['Images'][0]['ImageURLs']['Large']
 			}
 		})
 

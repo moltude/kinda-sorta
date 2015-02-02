@@ -11,10 +11,19 @@
 		<script>
 			// Slider jQuery
 			$(function() {
-				$( "#geography_slider" ).slider();
-				$( "#objectName_slider" ).slider();
-				$( "#material_slider" ).slider();
-				$( "#magic_slider" ).slider();
+				$( "#matSlide, #geoSlide, #nameSlide, #magicSlide" ).slider(
+				{	
+					orientation: "horizontal",
+					min: 1,
+					max: 100,
+					value: 50,
+					slide: function( event, ui ) {
+						var id = $(this).attr("name");
+						// works!
+						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );						
+            		}
+				});
+				$( "#slider-value" ).html(  $('#matSlide, #geoSlide, #nameSlide, #magicSlide').slider('value') );
 			});
 	  	</script>
 	</head>
