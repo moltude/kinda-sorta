@@ -1,3 +1,11 @@
+/* disable that stupid focus border */
+*:focus {
+    outline: 0;
+}
+
+#ddlID {
+	width: 158px
+}
 #width_tmp{
  display : none;
 }

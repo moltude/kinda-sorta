@@ -30,72 +30,43 @@
 			    	// console.log(selText);
 			    	$("#width_tmp").html(this.options[e.target.selectedIndex].text);
     				$(this).width($("#width_tmp").width()); 
-			 	});
 
-				// Re-query with values from sliders
-	            $('body').on('click', '.slide-submit', function() {
-	            	src = $(this).attr('src')
-	            	$.ajax({
+    				/*
+					After changing one of the attributes; the Solr index should be requeried 
+					using the new values 
+    				*/
+
+    				$.ajax({
+    					// TODO :: all of this needs to be written
 	            		type: "POST",
 	            		url: "../query/",
 	            		data: {
 	            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
 	            			'q': $(this).attr('q'),
-	            			// pass in values of all the sliders as
-	            			// 'material_val': $(this).attr('material-value'),
+	            			// pass in values from selects
 	            		}, 
 	            		success: function(newData){
 	            			// Write HTML
-	    				    $("div#"+src+".results").html(newData);
+	    				    $("div#results").html(newData);
 	    				},
 	    				error: function(badData){
 	    					console.log(badData)
-						    alert('Failed to next');
+						    alert('Failed to requery');
 						}
 	            	})
-	            })
-				$( "#matSlide, #geoSlide, #nameSlide, #magicSlide" ).slider({	
-					orientation: "horizontal",
-					min: 1,
-					max: 100,
-					value: 50,
-					slide: function( event, ui ) {
-						// Could encapsulate the 'slide-submit' functionality 
-						// here so results update on slide
-						var id = $(this).attr("name");
-						// works!
-						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );						
-            		},
-            		create: function( event, ui ) {
-            			var id = $(this).attr("name");
-						// works!
-						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );							
-            		}
-				});
-
-				// Hard-coded because JavaScript sucks and 
-				// I can't figure out how to display intial 
-				// value like I can with the value updates
-				$('span[id="slider-value"][name="material"]').html($("#matSlide").slider("value"));
-				$('span[id="slider-value"][name="objectName"]').html($("#nameSlide").slider("value"));
-				$('span[id="slider-value"][name="geography"]').html($("#geoSlide").slider("value"));
-				$('span[id="slider-value"][name="magic"]').html($("#magicSlide").slider("value"));
+			 	});
 			});
 	  	</script>
 	</head>
 
 	<body>
-    
 		{% load humanize %}
-		<!-- Header -->
 		<div style="padding: 60px 30px">
 			<div style="border: 2px solid; padding: 10px; overflow: auto">
 				<div style="float: left">
-					<img src="{{ baseObj.img }}" height="300" style="padding:">
+					<img src="{{ baseObj.img }}" height="300" style="padding-right: 15px">
 				</div>
 				{% include 'text_blob.html' %}
-
-				<!-- { include 'sliders.html' } removed % %-->
 			</div>
 			<!-- Page divider -->
 			<div style="clear:both; margin: 30px 0px 30px"/>

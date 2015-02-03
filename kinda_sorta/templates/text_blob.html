@@ -1,15 +1,22 @@
+
+<!-- 
+The blob of text nex to the image. The selcts are hard-coded so they can be uniquely 
+identified.
+
+This whole page probably could be cleaned up but for now it is functional
+-->
 <div style="clear:float">
-<span style="float:left; padding-left: 10px; margin: 0px; max-width:85%; line-height: 1.5">
+<span style="padding-left: 10px; margin: 10px; max-width:85%; line-height: 1.5">
 	<h3>Found 1,853 objects that are kinda-sorta like the object you selected. These objects are 
 
-	<select name="objectNameDD" id="ddlID" style="width: 158px;">
+	<select name="objectNameDD" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
 	like <u>{{ baseObj.objectName }}</u> and 
 
-	<select id="artistDD" style="width: 158px;">
+	<select name="artistDD" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
@@ -17,14 +24,14 @@
 	like the artist, <u>Chinese</u>, and
 	<!-- <u>{{ baseObj.artist }}</u>  -->
 
-	<select id="geographyDD" style="width: 158px;">
+	<select name="geographyDD" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
 	like its place of origin, <u>China</u>, and 
 
-	<select id="materialDD" style="width: 158px;">
+	<select name="materialDD" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
@@ -32,7 +39,8 @@
 	like what it is made of, <u>{{ baseObj.material }}</u>.
 
 	<br><br>
-	<select id="magicDD" style="width: 45px;">
+	<!-- Over-ride the default width -->
+	<select name="magicDD" id="ddlID" style="width: 45px;">
 		<option value="1">All of the</option>
 		<option value="2">A lot</option>
 		<option selected value="3">A little</option>
