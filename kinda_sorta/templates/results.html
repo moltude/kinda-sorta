@@ -12,6 +12,8 @@
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
 		<script>
+			
+
 			// Slider jQuery
 			// Taken from 
 			// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
@@ -19,6 +21,7 @@
 			$(document).ready(function() {
 				$('select option').each(function() {
 			    	$(this).data('original-text', $(this).text()); 
+			    	
 				});
 
 				$('select').change(function (e) {
@@ -32,10 +35,23 @@
     				$(this).width($("#width_tmp").width()); 
 
     				/*
+					Successfully logging the current values of all of the selects 
+					Need to write those to a JSON object and pass back to VIEW (via AJAX below) to 
+					construct and run a Solr query 
+    				*/
+    				$('select').each(function() {
+				   		
+				   		var name = this.name;
+				   		var e = document.getElementsByName(name);
+				   		// console.log(e)
+				   		console.log(this.name + ' == ' + e[0][e[0].options.selectedIndex].text);
+			   		})
+    				/*
 					After changing one of the attributes; the Solr index should be requeried 
 					using the new values 
     				*/
 
+    				/*
     				$.ajax({
     					// TODO :: all of this needs to be written
 	            		type: "POST",
@@ -54,6 +70,7 @@
 						    alert('Failed to requery');
 						}
 	            	})
+					*/
 			 	});
 			});
 	  	</script>
@@ -75,5 +92,9 @@
 				{% include 'object_results.html' %}
 			</div>
 		</div>
+
+		<script type="text/javascript">
+
+		</script>
 	</body>
 </html>
