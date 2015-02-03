@@ -17,7 +17,9 @@ def index(request):
 	return render(request, 'index.html', {'bg':bg_imgs[index]} )
 
 """
-Display the similar objects for a Walters Art Museum object
+Called from the landing page. Builds the default search results page which consists of:
+1. Summary of the object searched for (image, metadata)
+2. Related objects using the stock values.
 """
 def results(request):
 	# is there a query parameter? 
@@ -53,6 +55,25 @@ def results(request):
 				'img':data['Images'][0]['ImageURLs']['Large']
 			}
 		})
+
+"""
+Query Solr for related objects
+
+"""
+def query(request): 
+	qterms = request.POST['q']
+
+	query = Query()	
+	response = query.keyword_search(qterms, qtype, curPage, source)
+	t = loader.get_template('partial_result_list.html')
+
+	c = RequestContext( request, { 
+		'data': response['sources'][source],
+		'source': source,
+		'q': qterms,
+		'qtype': qtype,
+		})
+	return HttpResponse(t.render(c))
 
 """
 render error page

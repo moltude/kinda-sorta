@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^results/$', views.results, name='results'),
     url(r'^error/$', views.error, name='error'),
+    url(r'^query/$', views.query, name='query'),
 
 )
 

@@ -5,18 +5,63 @@
 		<title>beastie</title>
 
 	  	<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+		<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}/javascript/jquery.dropdown.css" />
 		<link rel="stylesheet" href="{{ STATIC_URL }}style.css">
+		
 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
 		<script>
 			// Slider jQuery
-			$(function() {
+			// Taken from 
+			// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
+
+			$(document).ready(function() {
+				$('select option').each(function() {
+			    	$(this).data('original-text', $(this).text()); 
+				});
+
+				$('select').change(function (e) {
+			    	$(this).find('option').each(function() {
+			        	$(this).text($(this).data('original-text')); 
+					});			    
+			    	// var selText = $('select option:selected').text();
+			    	// var selText = this.options[e.target.selectedIndex].text;
+			    	// console.log(selText);
+			    	$("#width_tmp").html(this.options[e.target.selectedIndex].text);
+    				$(this).width($("#width_tmp").width()); 
+			 	});
+
+				// Re-query with values from sliders
+	            $('body').on('click', '.slide-submit', function() {
+	            	src = $(this).attr('src')
+	            	$.ajax({
+	            		type: "POST",
+	            		url: "../query/",
+	            		data: {
+	            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
+	            			'q': $(this).attr('q'),
+	            			// pass in values of all the sliders as
+	            			// 'material_val': $(this).attr('material-value'),
+	            		}, 
+	            		success: function(newData){
+	            			// Write HTML
+	    				    $("div#"+src+".results").html(newData);
+	    				},
+	    				error: function(badData){
+	    					console.log(badData)
+						    alert('Failed to next');
+						}
+	            	})
+	            })
 				$( "#matSlide, #geoSlide, #nameSlide, #magicSlide" ).slider({	
 					orientation: "horizontal",
 					min: 1,
 					max: 100,
 					value: 50,
 					slide: function( event, ui ) {
+						// Could encapsulate the 'slide-submit' functionality 
+						// here so results update on slide
 						var id = $(this).attr("name");
 						// works!
 						$( 'span[id="slider-value"][name="'+id+'"]' ).html( ui.value );						
@@ -28,7 +73,9 @@
             		}
 				});
 
-				// Hard-coded because JQuery sucks and I can't figure out how to display intial value
+				// Hard-coded because JavaScript sucks and 
+				// I can't figure out how to display intial 
+				// value like I can with the value updates
 				$('span[id="slider-value"][name="material"]').html($("#matSlide").slider("value"));
 				$('span[id="slider-value"][name="objectName"]').html($("#nameSlide").slider("value"));
 				$('span[id="slider-value"][name="geography"]').html($("#geoSlide").slider("value"));
@@ -38,6 +85,7 @@
 	</head>
 
 	<body>
+    
 		{% load humanize %}
 		<!-- Header -->
 		<div style="padding: 60px 30px">
@@ -45,47 +93,16 @@
 				<div style="float: left">
 					<img src="{{ baseObj.img }}" height="300" style="padding:">
 				</div>
-				<div style="clear:float">
-					<span style="float:left; padding-left: 10px; margin: 0px; max-width:35%; ">
-						<h3><i> {{ baseObj.title 		}} </i></h3>
-						<h3>	{{ baseObj.material 	}} </h3>
-						<h3>	{{ baseObj.objectName 	}} </h3>
-						<h3><a href='{{baseObj.url }}'>View online</a></h3>
-					</span>
-				</div>
+				{% include 'text_blob.html' %}
 
-				{% include 'sliders.html' %}
+				<!-- { include 'sliders.html' } removed % %-->
 			</div>
 			<!-- Page divider -->
 			<div style="clear:both; margin: 30px 0px 30px"/>
 
-			<!-- Images  -->
-			<div id="thumbs">
-				<!-- TODO :: This should call a template for objects in reponse -->
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image2" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-				<a id="single_image3" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-
-				<span class="stretch"></span>
-			</div>​
+			<div id='results'>
+				{% include 'object_results.html' %}
+			</div>
 		</div>
 	</body>
 </html>
