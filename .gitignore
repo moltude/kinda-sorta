@@ -62,4 +62,5 @@ db/
 solr/
 .alias*
 localsettings.py
+solr-conf
 solr-conf/
