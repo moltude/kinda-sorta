@@ -12,18 +12,17 @@
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
 		<script>
-			
-
 			// Slider jQuery
 			// Taken from 
 			// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
-
 			$(document).ready(function() {
 				$('select option').each(function() {
 			    	$(this).data('original-text', $(this).text()); 
-			    	
 				});
 
+				/*
+				This event is the primary driver of the site. On change triggers a new query and display of results
+				*/
 				$('select').change(function (e) {
 			    	$(this).find('option').each(function() {
 			        	$(this).text($(this).data('original-text')); 
@@ -39,26 +38,30 @@
 					Need to write those to a JSON object and pass back to VIEW (via AJAX below) to 
 					construct and run a Solr query 
     				*/
+    				
+    				// Store current vales in this JSON object. This will be passed back to view.query()
+    				var ks = {};
     				$('select').each(function() {
-				   		
-				   		var name = this.name;
-				   		var e = document.getElementsByName(name);
-				   		// console.log(e)
-				   		console.log(this.name + ' == ' + e[0][e[0].options.selectedIndex].text);
+				   		var ksName = this.name;
+				   		var e = document.getElementsByName(ksName);
+				   		var val = e[0][e[0].options.selectedIndex].text;
+				   		ks[ksName] = val;
 			   		})
+
     				/*
 					After changing one of the attributes; the Solr index should be requeried 
 					using the new values 
     				*/
-
-    				/*
+    				
     				$.ajax({
     					// TODO :: all of this needs to be written
 	            		type: "POST",
 	            		url: "../query/",
+	            		// if not returning json from VIEW.query then this must be commented out
+	            		// dataType: 'json',
 	            		data: {
 	            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
-	            			'q': $(this).attr('q'),
+	            			'ks': JSON.stringify(ks),
 	            			// pass in values from selects
 	            		}, 
 	            		success: function(newData){
@@ -67,10 +70,9 @@
 	    				},
 	    				error: function(badData){
 	    					console.log(badData)
-						    alert('Failed to requery');
+						    alert('something has kinda-sorta gone wrong');
 						}
 	            	})
-					*/
 			 	});
 			});
 	  	</script>
@@ -80,6 +82,7 @@
 		{% load humanize %}
 		<div style="padding: 60px 30px">
 			<div style="border: 2px solid; padding: 10px; overflow: auto">
+				{% csrf_token %}
 				<div style="float: left">
 					<img src="{{ baseObj.img }}" height="300" style="padding-right: 15px">
 				</div>
@@ -92,9 +95,5 @@
 				{% include 'object_results.html' %}
 			</div>
 		</div>
-
-		<script type="text/javascript">
-
-		</script>
 	</body>
 </html>

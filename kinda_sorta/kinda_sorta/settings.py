@@ -79,8 +79,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-
-
 ROOT_URLCONF = 'kinda_sorta.urls'
 
 WSGI_APPLICATION = 'kinda_sorta.wsgi.application'

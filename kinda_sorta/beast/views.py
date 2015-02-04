@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.core.context_processors import csrf
 
 import random
 from beast.validater import validater
 from beast.walters import walters
+
+import json
 # Create your views here.
 
 """
@@ -61,19 +64,24 @@ Query Solr for related objects
 
 """
 def query(request): 
-	qterms = request.POST['q']
+	try : 
+		print (request.POST)
+		ks = json.loads(request.POST.get('ks'))
 
-	query = Query()	
-	response = query.keyword_search(qterms, qtype, curPage, source)
-	t = loader.get_template('partial_result_list.html')
+	# t = loader.get_template('partial_result_list.html')
 
-	c = RequestContext( request, { 
-		'data': response['sources'][source],
-		'source': source,
-		'q': qterms,
-		'qtype': qtype,
-		})
-	return HttpResponse(t.render(c))
+	# c = RequestContext( request, { 
+	# 	'data': response['sources'][source],
+	# 	'source': source,
+	# 	'q': qterms,
+	# 	'qtype': qtype,
+	# 	})
+	# return HttpResponse(t.render(c))
+		print (str(ks))
+		return HttpResponse(' HELLO WORLD ' + str(ks))
+	except Exception as e:
+		print (e)
+		return HttpResponse('NULL')
 
 """
 render error page
