@@ -1,7 +1,8 @@
 
 <!-- Images  -->
-<div id="thumbs">
-	<!-- TODO :: This should call a template for objects in reponse -->
-	<a id="single_image1" href="#"><img src="http://dummyimage.com/150x150/444/fff" alt=""/></a>
-	<span class="stretch"></span>
-</div>​
+<!-- TODO :: This should call a template for objects in reponse -->
+<div id="container" class="js-masonry" data-masonry-options='{ "columnWidth": 250, "itemSelector": ".object" }'>
+	{% for object in response.objects %}
+		<a class='object' id="{{ object.objNumber }} " href="{{ object.objUrl }}" target="_blank" ><img src=" {{ object.imgUrl }} " alt="" style="vertical-align: top;" /></a>
+	{% endfor %}
+</div>

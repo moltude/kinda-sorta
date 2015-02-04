@@ -10,70 +10,89 @@
 		
 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+		
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/imagesloaded.pkgd.min.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/masonry.pkgd.min.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
 		<script>
-			// Slider jQuery
-			// Taken from 
-			// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
-			$(document).ready(function() {
+			/*
+			Changed input values then ...
+			*/
+			function loadResults (e) {
+		    	$(this).find('option').each(function() {
+		        	$(this).text($(this).data('original-text')); 
+				});			    
+				// Taken from 
+				// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
+		    	$("#width_tmp").html(this.options[e.target.selectedIndex].text);
+				$(this).width($("#width_tmp").width()); 
+				/*
+				After changing one of the attributes; the Solr index should be requeried 
+				using the new values 
+				*/
+				getObjects();
+		 	}
+
+		 	/*
+			Successfully logging the current values of all of the selects 
+			Need to write those to a JSON object and pass back to VIEW (via AJAX below) to 
+			construct and run a Solr query 
+			*/
+		 	function getObjects () {
+		 		// Store current vales in this JSON object. This will be passed back to view.query()
+		 		var ks = {};
+				$('select').each(function() {
+			   		var ksName = this.name;
+			   		var e = document.getElementsByName(ksName);
+			   		var val = e[0][e[0].options.selectedIndex].text;
+			   		ks[ksName] = val;
+		   		})
+
+				$.ajax({
+            		type: "POST",
+            		url: "../query/",
+            		// if not returning json from VIEW.query then this must be commented out
+            		// dataType: 'json',
+            		data: {
+            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
+            			// pass in values from selects
+            			'ks': JSON.stringify(ks),
+            		}, 
+            		success: function(newData){
+    				    $("div#results").html(newData);
+    				},
+    				error: function(badData){
+    					console.log(badData)
+					    alert('something has kinda-sorta gone wrong');
+					}
+            	})
+		 	}
+
+			$(document).ready(function() {			
+				$('#container').imagesLoaded()
+					.always( function( instance ) {
+						console.log('all images loaded');
+					})
+					.done( function( instance ) {
+						console.log('all images successfully loaded');
+					})
+					.fail( function() {
+						console.log('all images loaded, at least one is broken');
+					})
+					.progress( function( instance, image ) {
+						var result = image.isLoaded ? 'loaded' : 'broken';
+						console.log( 'image is ' + result + ' for ' + image.img.src );
+				});
+
 				$('select option').each(function() {
 			    	$(this).data('original-text', $(this).text()); 
 				});
-
 				/*
 				This event is the primary driver of the site. On change triggers a new query and display of results
 				*/
-				$('select').change(function (e) {
-			    	$(this).find('option').each(function() {
-			        	$(this).text($(this).data('original-text')); 
-					});			    
-			    	// var selText = $('select option:selected').text();
-			    	// var selText = this.options[e.target.selectedIndex].text;
-			    	// console.log(selText);
-			    	$("#width_tmp").html(this.options[e.target.selectedIndex].text);
-    				$(this).width($("#width_tmp").width()); 
-
-    				/*
-					Successfully logging the current values of all of the selects 
-					Need to write those to a JSON object and pass back to VIEW (via AJAX below) to 
-					construct and run a Solr query 
-    				*/
-    				
-    				// Store current vales in this JSON object. This will be passed back to view.query()
-    				var ks = {};
-    				$('select').each(function() {
-				   		var ksName = this.name;
-				   		var e = document.getElementsByName(ksName);
-				   		var val = e[0][e[0].options.selectedIndex].text;
-				   		ks[ksName] = val;
-			   		})
-
-    				/*
-					After changing one of the attributes; the Solr index should be requeried 
-					using the new values 
-    				*/
-    				
-    				$.ajax({
-    					// TODO :: all of this needs to be written
-	            		type: "POST",
-	            		url: "../query/",
-	            		// if not returning json from VIEW.query then this must be commented out
-	            		// dataType: 'json',
-	            		data: {
-	            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
-	            			'ks': JSON.stringify(ks),
-	            			// pass in values from selects
-	            		}, 
-	            		success: function(newData){
-	            			// Write HTML
-	    				    $("div#results").html(newData);
-	    				},
-	    				error: function(badData){
-	    					console.log(badData)
-						    alert('something has kinda-sorta gone wrong');
-						}
-	            	})
-			 	});
+				$('select').change( loadResults );
+				// Load object on inital page load
+				getObjects();
 			});
 	  	</script>
 	</head>

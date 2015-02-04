@@ -50,14 +50,14 @@ def results(request):
 
 	# renders stock result page
 	return render(request, 'results.html', 
-		{'baseObj': 
-			{ 	'title':data['Title'],
-				'material':data['Medium'],
-				'objectName':data['ObjectName'],
-				'url':data['ResourceURL'],
-				'img':data['Images'][0]['ImageURLs']['Large']
-			}
-		})
+			{'baseObj': 
+				{ 	'title':data['Title'],
+					'material':data['Medium'],
+					'objectName':data['ObjectName'],
+					'url':data['ResourceURL'],
+					'img':data['Images'][0]['ImageURLs']['Large']
+				}
+			})
 
 """
 Query Solr for related objects
@@ -65,20 +65,12 @@ Query Solr for related objects
 """
 def query(request): 
 	try : 
-		print (request.POST)
 		ks = json.loads(request.POST.get('ks'))
-
-	# t = loader.get_template('partial_result_list.html')
-
-	# c = RequestContext( request, { 
-	# 	'data': response['sources'][source],
-	# 	'source': source,
-	# 	'q': qterms,
-	# 	'qtype': qtype,
-	# 	})
-	# return HttpResponse(t.render(c))
-		print (str(ks))
-		return HttpResponse(' HELLO WORLD ' + str(ks))
+		wam = walters()
+		response = wam.getTestImages()
+		return render(request, 'object_results.html', {
+			'response': response, 
+		})
 	except Exception as e:
 		print (e)
 		return HttpResponse('NULL')
