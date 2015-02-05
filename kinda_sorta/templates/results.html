@@ -14,6 +14,9 @@
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/imagesloaded.pkgd.min.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/masonry.pkgd.min.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/isotope.pkgd.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/masonry-horizontal.js"></script>
+		
 		<script>
 			/*
 			Changed input values then ...
@@ -68,7 +71,20 @@
             	})
 		 	}
 
-			$(document).ready(function() {			
+			function masonryLoad () {
+			   var $container = $('.js-masonry');            
+			   $container.imagesLoaded(function(){                    
+			      $container.masonry({
+			         itemSelector: '.object',
+			         isAnimated: false,
+			         columnWidth: 250,
+			         gutter: 10,
+			         isFitWidth: false,
+			      });
+			   });
+			}	
+
+			$(document).ready(function() {
 				$('#container').imagesLoaded()
 					.always( function( instance ) {
 						console.log('all images loaded');
@@ -93,6 +109,8 @@
 				$('select').change( loadResults );
 				// Load object on inital page load
 				getObjects();
+				// Load masonry
+				masonryLoad();
 			});
 	  	</script>
 	</head>

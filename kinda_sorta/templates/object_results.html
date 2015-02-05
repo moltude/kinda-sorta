@@ -1,8 +1,27 @@
 
+
+
+<script type="text/javascript">
+$(function(){
+   var $container = $('.js-masonry');            
+   $container.imagesLoaded(function(){                    
+      $container.masonry({
+         itemSelector: '.object',
+         isAnimated: false,
+         columnWidth: 250,
+         gutter: 20,
+         isFitWidth: false,
+      });
+   });
+});
+</script>
+
 <!-- Images  -->
-<!-- TODO :: This should call a template for objects in reponse -->
-<div id="container" class="js-masonry" data-masonry-options='{ "columnWidth": 250, "itemSelector": ".object" }'>
+<div id="container" class="masonry js-masonry">
+	
 	{% for object in response.objects %}
-		<a class='object' id="{{ object.objNumber }} " href="{{ object.objUrl }}" target="_blank" ><img src=" {{ object.imgUrl }} " alt="" style="vertical-align: top;" /></a>
+		<!-- <a  id="{{object.objNumber}}" href="{{object.objUrl}}" target="blank"> -->
+			<img style='margin-bottom: 20px; border: 2px solid #333; border-color: hsla(0, 0%, 0%, 0.5); border-radius: 5px;' class='object' src="{{object.imgUrl}}" alt="" onError="this.onerror=''; this.style.visibility='hidden';"/>
+		<!-- </a> -->
 	{% endfor %}
 </div>

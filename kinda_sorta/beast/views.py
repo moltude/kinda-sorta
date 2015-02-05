@@ -44,6 +44,8 @@ def results(request):
 	wam = walters()
 	try: 
 		data = wam.getObject(objectId)
+		flatData = wam.flatten(data)
+
 	except Exception as e:
 		print (e)
 		return error(request)
@@ -55,7 +57,8 @@ def results(request):
 					'material':data['Medium'],
 					'objectName':data['ObjectName'],
 					'url':data['ResourceURL'],
-					'img':data['Images'][0]['ImageURLs']['Large']
+					'img':data['Images'][0]['ImageURLs']['Large'],
+					'artist':data['Creators'],
 				}
 			})
 

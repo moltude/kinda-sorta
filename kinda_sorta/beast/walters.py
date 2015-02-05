@@ -51,6 +51,29 @@ class walters():
 		return data['Data']
 
 	"""
+	There are several nested fields within the Walters API response which should be
+	flatten out for HTML display
+
+	This will be done on a specific field-by-field basis
+	"""
+	def flatten(self, data): 
+		creators = '' 
+		# creators Creators 
+		if 'Creators' in data: 
+			numCreators = len(data['Creators'])
+			for numCreators, creator in enumerate(data['Creators']):
+				if numCreators == len(data['Creators']):
+					creators = creators + ' and ' + creator['ConcatDisplayName']
+				elif numCreators > 1:
+					creators = creators + ', ' + creator['ConcatDisplayName']
+				else: 
+					creators = creator['ConcatDisplayName']
+			data['Creators'] = creators
+
+		return data
+
+
+	"""
 	Pulls in random images for testing purposes 
 	"""
 	def getTestImages(self):

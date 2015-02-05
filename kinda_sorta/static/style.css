@@ -42,11 +42,10 @@ select {
 }
 
 .page-center-title-div {
-  width: 50%;
-  height: 100px;
-  line-height: 100px;
-  text-align: center;
-  /* */
+	width: 50%;
+	height: 100px;
+	line-height: 100px;
+	text-align: center;
   	/*margin-top:-50px;  half of height */
   	position: absolute;
 	left: 25%;
@@ -129,6 +128,10 @@ h3 a:visited {
 	color:#000000
 }
 
+a:-webkit-any-link {
+	text-decoration:none !important;
+}
+
 .text {
 	/*margin: 10px;*/
 	font-family: Calibri;
@@ -147,19 +150,6 @@ h3 a:visited {
 	font-weight: bold;
 	text-align: center;
 	font-family: sans-serif;
-}
-
-.evenrow {
-	margin: 10px;
-	font-size: 10pt;
-	font-family: serif;
-}
-
-.oddrow {
-	background: rgba(204, 204, 204, 0.4);
-	margin: 10px;
-	font-size: 10pt;
-	font-family: serif;
 }
 
 #tabs { 
@@ -185,25 +175,10 @@ h3 a:visited {
 	height: 40px
 }
 
-#bib_column {
-	width: 90%
-}
 
 #link_column {
 	width: 10%;
 	vertical-align: top;
 	text-align: right;
 }
-
-
-/* 
-CSS for evening distrubing imgaes 
-taken from 
-
-*/
-
-
-
-
-
 
