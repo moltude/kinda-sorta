@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,6 +15,7 @@
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/jquery.dropdown.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/isotope.pkgd.js"></script>
 		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/masonry-horizontal.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}/javascript/csrf.js"></script>
 		
 		<script>
 			/*
@@ -43,48 +43,34 @@
 			*/
 		 	function getObjects () {
 		 		// Store current vales in this JSON object. This will be passed back to view.query()
-		 		var ks = {};
+		 		var ks = Object();
 				$('select').each(function() {
 			   		var ksName = this.name;
 			   		var e = document.getElementsByName(ksName);
 			   		var val = e[0][e[0].options.selectedIndex].text;
 			   		ks[ksName] = val;
 		   		})
-
 				$.ajax({
-            		type: "POST",
-            		url: "../query/",
-            		// if not returning json from VIEW.query then this must be commented out
-            		// dataType: 'json',
-            		data: {
-            			'csrfmiddlewaretoken': '{{ csrf_token }}', 
-            			// pass in values from selects
-            			'ks': JSON.stringify(ks),
-            		}, 
-            		success: function(newData){
-    				    $("div#results").html(newData);
-    				},
-    				error: function(badData){
-    					console.log(badData)
-					    alert('something has kinda-sorta gone wrong');
-					}
-            	})
-		 	}
+					type: "POST",
+					url: "../query/",
+					// contentType: "application/json",
+					// if not returning json from VIEW.query then this must be commented out
+					// dataType: "json",
+					data: {
+						'ks': JSON.stringify(ks)
+					}, 
+					success: function(newData){
+					    $("div#results").html(newData);
+					},
+					error: function(badData) {
+							console.log('there was an error')
+							$("div#results").html(badData);
+						}
+					})
+				}
 
-			function masonryLoad () {
-			   var $container = $('.js-masonry');            
-			   $container.imagesLoaded(function(){                    
-			      $container.masonry({
-			         itemSelector: '.object',
-			         isAnimated: false,
-			         columnWidth: 250,
-			         gutter: 10,
-			         isFitWidth: false,
-			      });
-			   });
-			}	
 
-			$(document).ready(function() {
+			$(document).ready(function() {		
 				$('#container').imagesLoaded()
 					.always( function( instance ) {
 						console.log('all images loaded');
@@ -109,8 +95,6 @@
 				$('select').change( loadResults );
 				// Load object on inital page load
 				getObjects();
-				// Load masonry
-				masonryLoad();
 			});
 	  	</script>
 	</head>

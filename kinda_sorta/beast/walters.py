@@ -10,8 +10,11 @@ import json
 import os
 from django.conf import settings
 import random
+import pprint
 
 class walters():
+
+	pp = pprint.PrettyPrinter(indent=4)
 
 	"""	
 	API paramters 
@@ -55,23 +58,36 @@ class walters():
 	flatten out for HTML display
 
 	This will be done on a specific field-by-field basis
+
+	TODO :: Rewrite and cleanup
 	"""
-	def flatten(self, data): 
-		creators = '' 
-		# creators Creators 
-		if 'Creators' in data: 
-			numCreators = len(data['Creators'])
-			for numCreators, creator in enumerate(data['Creators']):
-				if numCreators == len(data['Creators']):
-					creators = creators + ' and ' + creator['ConcatDisplayName']
-				elif numCreators > 1:
-					creators = creators + ', ' + creator['ConcatDisplayName']
-				else: 
-					creators = creator['ConcatDisplayName']
-			data['Creators'] = creators
+	def flatten(self, data):
+		creators = [] 
+		geoTerms = []
+		# Flatten Creator
+		if 'Creators' in data and data['Creators'] is not None: 
+			for creator in data['Creators']:
+				creators.append(creator['ConcatDisplayName'])			
+			data['Creators'] = self.prettyString(creators)
+
+		# Flatten Geographies
+		if 'Geographies' in data and data['Geographies'] is not None: 
+			for geo in data['Geographies']:
+				geoTerms.append(geo['GeographyTerm'])
+			data['Geographies'] = self.prettyString(geoTerms)
 
 		return data
 
+	"""
+	Make it all pretty with commas and and's
+	"""
+	def prettyString(self, strArray):
+		commaStr = "|".join(strArray)
+		if '|' in commaStr:
+			# replace last comma with an ' and '
+			k = commaStr.rfind("|")
+			commaStr = commaStr[:k] + " and " + commaStr[k+1:]
+		return commaStr.replace('|', ', ')
 
 	"""
 	Pulls in random images for testing purposes 
@@ -96,6 +112,23 @@ class walters():
 			objects.append(obj)
 
 		return {'objects': objects}
+
+	def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
+		url = self.solrServer + '/query?q='\
+		+ urllib.quote_plus('ks_how:'+ mq \
+		+ ' AND ks_what:' + oq) \
+		+ '&qf=ks_how^' + str(mat_weight) \
+		+ '&qf=ks_what^' + str(objName_weight) \
+		+ '&wt=json&indent=true'
+		
+		print (url)
+		
+		response = json.load(urllib.request.urlopen(url))
+		
+		for docs in response['response']['docs']:
+			print ('MATERIAL: ' + docs['material'].encode('utf-8'))
+			print ('OBJECT NAME: '+ docs['objectName'].encode('utf-8'))
+			print ('--')
 
 
 

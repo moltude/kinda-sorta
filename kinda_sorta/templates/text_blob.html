@@ -9,6 +9,7 @@ This whole page probably could be cleaned up but for now it is functional
 <span style="padding-left: 10px; margin: 10px; max-width:85%; line-height: 1.5">
 	<h3>Found 1,853 objects that are kinda-sorta like the object you selected. These objects are 
 
+
 	<select name="objectNameDD" id="ddlID">
 		{% include 'options.html' %}
 	</select>
@@ -29,7 +30,7 @@ This whole page probably could be cleaned up but for now it is functional
 	</select>
 	<span id="width_tmp"></span>
 
-	like its place of origin, <u>China</u>, and 
+	like its place of origin, {{ baseObj.geography }}, and 
 
 	<select name="materialDD" id="ddlID">
 		{% include 'options.html' %}

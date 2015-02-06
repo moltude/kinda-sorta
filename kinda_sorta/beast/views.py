@@ -1,12 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.context_processors import csrf
+from django.template import loader, Context, RequestContext, Template
 
-import random
 from beast.validater import validater
 from beast.walters import walters
 
+import random
 import json
+
+
 # Create your views here.
 
 """
@@ -30,7 +33,7 @@ def results(request):
 		url = request.GET['q']
 	else:
 		# Return an error page
-		return render(request, 'results.html')
+		return error(request)
 	# next validate the q
 	try:
 		url_valid = validater()
@@ -50,17 +53,29 @@ def results(request):
 		print (e)
 		return error(request)
 
-	# renders stock result page
-	return render(request, 'results.html', 
-			{'baseObj': 
-				{ 	'title':data['Title'],
-					'material':data['Medium'],
-					'objectName':data['ObjectName'],
-					'url':data['ResourceURL'],
-					'img':data['Images'][0]['ImageURLs']['Large'],
-					'artist':data['Creators'],
+	# Store the values of the object in a Session 
+	request.session['title'] = flatData['Title']
+	request.session['medium'] = flatData["Medium"]
+	request.session['objectName'] = flatData['ObjectName']
+	request.session['creators'] = flatData["Creators"]
+	request.session['geography'] = flatData["Geographies"]
+
+	json_obj = {"baseObj": 
+				{ "title":flatData['Title'],
+					"material":flatData["Medium"],
+					"objectName":flatData["ObjectName"],
+					"url":flatData["ResourceURL"],
+					"img":flatData["Images"][0]["ImageURLs"]["Large"],
+					"artist":flatData["Creators"],
+					"geography":flatData["Geographies"],
 				}
-			})
+			}
+
+	# renders stock result page
+	# return render(request, 'results.html', json_obj)
+	t = loader.get_template('results.html')
+	c = RequestContext(request, json_obj)
+	return HttpResponse(t.render(c))
 
 """
 Query Solr for related objects
@@ -70,14 +85,19 @@ def query(request):
 	try : 
 		ks = json.loads(request.POST.get('ks'))
 		wam = walters()
-		response = wam.getTestImages()
-		return render(request, 'object_results.html', {
-			'response': response, 
-		})
-	except Exception as e:
-		print (e)
-		return HttpResponse('NULL')
 
+		# Pass session variables 
+		# def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
+
+		response = wam.getTestImages()
+		t = loader.get_template('object_results.html')
+		c = RequestContext( request, { 'response': response })
+		return HttpResponse(t.render(c))
+
+	except Exception as e:
+		print ("Exception thrown")
+		print (e)
+		return HttpResponse("{vale:shit}","application/json")
 """
 render error page
 """
