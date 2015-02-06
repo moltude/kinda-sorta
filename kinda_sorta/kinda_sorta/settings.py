@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import sys 
 
-HEROKU = bool(os.environ.get('HEROKU', ''))
+HEROKU = bool(os.environ.get('ON_HEROKU', ''))
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -48,7 +48,6 @@ if not HEROKU:
     # SECRET_KEY = '418*_9^ohbvha30jl(-u231v1tqt&=kf97ob1uc!_nxyy==_)1'
     try:
         from .localsettings import *
-
     except Exception:
         import sys
         print >> sys.stderr, 'No local settings. Trying to start, but if ' + \

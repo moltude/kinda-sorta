@@ -21,7 +21,7 @@ class walters():
 	"""
 	walters_base_url = 'http://api.thewalters.org/v1/objects'
 
-	HEROKU = bool(os.environ.get('HEROKU', ''))
+	HEROKU = bool(os.environ.get('ON_HEROKU', ''))
 	if HEROKU:
 		api_key = os.environ['WALTERS_API_KEY']
 	if not HEROKU:
