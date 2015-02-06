@@ -1,11 +1,6 @@
-DateTime==4.0.1
 Django==1.7.4
 humanize==0.5.1
 numpy==1.9.1
-pandas==0.15.2
-PyMySQL==0.6.3
-python-dateutil==2.4.0
 pytz==2014.10
-scandir==0.9
 six==1.9.0
 zope.interface==4.1.2
