@@ -32,8 +32,8 @@ if HEROKU:
     ALLOWED_HOSTS = ['.herokuapp.com']
 
     # Static asset configuration
-    STATIC_ROOT = 'static'
-    STATIC_URL = '/static/'
+    # STATIC_ROOT = 'static'
+    # STATIC_URL = '/static/'
 # 
     # STATICFILES_DIRS = (
     #     os.path.join(BASE_DIR, 'static'),
@@ -44,10 +44,11 @@ if not HEROKU:
     DEBUG = True
     TEMPLATE_DEBUG = True
     ALLOWED_HOSTS = [ '*' ]
-
+    # SECRET_KEY = '418*_9^ohbvha30jl(-u231v1tqt&=kf97ob1uc!_nxyy==_)1'
     try:
         from .localsettings import *
-    except ImportError:
+
+    except Exception:
         import sys
         print >> sys.stderr, 'No local settings. Trying to start, but if ' + \
             'stuff blows up, try copying localsettings.py.dist to ' + \

@@ -23,9 +23,9 @@ class walters():
 
 	HEROKU = bool(os.environ.get('HEROKU', ''))
 	if HEROKU:
-		api_key = os.environ['walters']
+		api_key = os.environ['WALTERS_API_KEY']
 	if not HEROKU:
-		api_key = settings.API_KEYS['walters']
+		api_key = settings.API_KEYS['WALTERS_API_KEY']
 
 	classifications = [ 
 		'Miniatures',
