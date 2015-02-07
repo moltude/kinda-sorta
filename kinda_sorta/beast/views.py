@@ -54,6 +54,7 @@ def results(request):
 		print (e)
 		return error(request)
 
+	# This whole section seems a bit ridiculous but whatever..atm
 	# Store the values of the object in a Session 
 	request.session['title'] = flatData['Title']
 	request.session['medium'] = flatData["Medium"]
@@ -62,7 +63,7 @@ def results(request):
 	request.session['geography'] = flatData["Geographies"]
 
 	json_obj = {"baseObj": 
-				{ "title":flatData['Title'],
+				{ 	"title":flatData['Title'],
 					"material":flatData["Medium"],
 					"objectName":flatData["ObjectName"],
 					"url":flatData["ResourceURL"],
@@ -91,6 +92,12 @@ def query(request):
 		# def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
 
 		response = wam.getTestImages()
+
+		# BASE_OBJ values are SESSION
+		# KS_VALS are in ks
+
+		wam.getKindaSortaObjects(ks=ks,baseObj=request.session)
+
 		t = loader.get_template('object_results.html')
 		c = RequestContext( request, { 'response': response })
 		return HttpResponse(t.render(c))

@@ -113,22 +113,19 @@ class walters():
 
 		return {'objects': objects}
 
-	def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
-		url = self.solrServer + '/query?q='\
-		+ urllib.quote_plus('ks_how:'+ mq \
-		+ ' AND ks_what:' + oq) \
-		+ '&qf=ks_how^' + str(mat_weight) \
-		+ '&qf=ks_what^' + str(objName_weight) \
-		+ '&wt=json&indent=true'
-		
-		print (url)
-		
-		response = json.load(urllib.request.urlopen(url))
-		
-		for docs in response['response']['docs']:
-			print ('MATERIAL: ' + docs['material'].encode('utf-8'))
-			print ('OBJECT NAME: '+ docs['objectName'].encode('utf-8'))
-			print ('--')
+	"""
+	Is passed the current KS values and base object metadata 
+	Calls ks_query in the Corona class 
+	Recieves results for ks_query (which is only objectId of results)
+	Queries WaltersAPI to get images for those results
+	Passes nicely formed JSON back to VIEWS.QUERY() <--- see getTestImages
+	"""
+	def getKindaSortaObjects(self, ks, baseObj):
+		self.pp.pprint(ks) 
+		self.pp.pprint(baseObj)
+		pass
+
+
 
 
 
