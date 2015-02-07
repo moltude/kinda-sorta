@@ -84,7 +84,7 @@ class corona:
 
 		url = self.solrServer + 'select?q='\
 		+ 'ks_how:'+ quote_plus(queryTerms['ks_how']) \
-		+ '&wt=json&indent=true&fl=objectId&rows=50'
+		+ '&wt=json&indent=true&fl=objectId&rows=25'
 		# + ' AND ks_what:' + quote_plus(queryTerms['ks_what']) \
 		# comment out the boosts until implementation
 		# + '&qf=ks_how^' + boosts['ks_how'] \

@@ -108,7 +108,7 @@ def query(request):
 	except Exception as e:
 		print ("Exception thrown")
 		print (e)
-		return HttpResponse("{vale:shit}","application/json")
+		return redirect(request, 'error.html')
 """
 render error page
 """
