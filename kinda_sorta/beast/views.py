@@ -98,8 +98,8 @@ def query(request):
 
 		response = wam.getKindaSortaObjects(ks=ks,baseObj=request.session)
 
-		# print ('QUERY RESP\n\n')
-		# print (response)
+		print ('QUERY RESP\n\n')
+		print (response)
 
 		t = loader.get_template('object_results.html')
 		c = RequestContext( request, { 'response': response })
