@@ -23,6 +23,8 @@ if HEROKU:
     # See http://offbytwo.com/2012/01/18/deploying-django-to-heroku.html
     SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
     # Parse database configuration from $DATABASE_URL
     # import dj_database_url
     # DATABASES = {'default':  dj_database_url.config()}
@@ -31,7 +33,7 @@ if HEROKU:
 
     # Allow all host headers
     ALLOWED_HOSTS = ['.herokuapp.com']
-    
+
 if not HEROKU:
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
@@ -106,10 +108,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-    # os.path.join(BASE_DIR, 'static'), # static is on root level
+    os.path.join(BASE_DIR, 'static'), # static is on root level
     # '/Users/scottwilliams/Code/Python/kinda-sorta/site/kinda_sorta',
 )
 
