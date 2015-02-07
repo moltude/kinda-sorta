@@ -6,11 +6,14 @@ Class for interacting with Walters API
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from urllib.parse import quote_plus
+from django.conf import settings
+from beast.corona import corona
+
 import json
 import os
-from django.conf import settings
 import random
 import pprint
+
 
 class walters():
 
@@ -121,8 +124,24 @@ class walters():
 	Passes nicely formed JSON back to VIEWS.QUERY() <--- see getTestImages
 	"""
 	def getKindaSortaObjects(self, ks, baseObj):
-		self.pp.pprint(ks) 
-		self.pp.pprint(baseObj)
+		queryTerms = {
+			'ks_what': baseObj['title'] + ' ' + baseObj['objectName'],
+			'ks_how': baseObj['medium'],
+			'ks_who': baseObj['creators'],
+			'ks_where': baseObj['geography'],
+		}
+
+		boosts = self.getBoostValues(ks=ks)
+
+		solr = corona()
+		solr_response = solr.ks_query(queryTerms, boosts=None)
+		return solr_response
+		
+
+	"""
+	Turn the text ks values into integers 
+	"""
+	def getBoostValues(self, ks):
 		pass
 
 

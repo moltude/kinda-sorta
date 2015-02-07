@@ -2,6 +2,7 @@
 Class for moving data to Solr 
 """
 from django.conf import settings
+from urllib.parse import quote_plus
 
 import platform
 import urllib
@@ -20,7 +21,12 @@ class corona:
 	if HEROKU:
 		solrServer = os.environ['SOLR_EC2']
 	if not HEROKU:
-		solrServer = settings.SOLR_EC2
+		try:
+			solrServer = settings.SOLR_EC2
+			# if unable to load from settings file then just hard coded
+		except Exception as e:
+			print(e)
+		
 
 	inst = None
 	def __init__(self): 
@@ -73,30 +79,29 @@ class corona:
 		id_objName: hard coding paramters to query against 
 
 	"""
-	def ks_query(self, id, ks_how, oq, ks_how_boost, ks_what_boost, mat_mm=None, objName_mm=None): 
-		url = self.solrServer + '/query?q='\
-		+ urllib.quote_plus('ks_how:'+ ks_how \
-		+ ' AND ks_what:' + ks_what) \
-		+ '&qf=ks_how^' + str(ks_how_boost) \
-		+ '&qf=ks_what^' + str(ks_what_boost) \
-		+ '&wt=json&indent=true'
+	def ks_query(self, queryTerms, boosts): 
+		url = self.solrServer + 'query?q='\
+		+ quote_plus('ks_how:'+ queryTerms['ks_how'] \
+		+ ' AND ks_what:' + quote_plus(queryTerms['ks_what']) \
+		+ '&wt=json&indent=true')
+		# comment out the boosts until implementation
+		# + '&qf=ks_how^' + boosts['ks_how'] \
+		# + '&qf=ks_what^' + boosts['ks_what'] \
 		
-		print (url)
-		try :
-			response = json.load(urllib.request.urlopen(url))
+		
+		try:
+			response = urllib.request.urlopen(url)
+			print ('SOLR RESPONSE: %s' % response.getcode())
 		except Exception as e: 
 			print ('Exception thrown fetching from Solr')
+			print (url)
 			# TODO :: Some stock query behavior and messaging so they get some results 
+			print (e)
+			return None
 		
-		for docs in response['response']['docs']:
-			print ('MATERIAL: ' + docs['material'].encode('utf-8'))
-			print ('OBJECT NAME: '+ docs['objectName'].encode('utf-8'))
-			print ('--')
-
 		# The response from Solr should only the the ObjectIDs because I will need to requery for all 
 		# items to get images from Walters API
-		return response['response']['docs']
-		
+		return None		
 
 	"""
 	select?q=*%3A*&wt=json&indent=true
