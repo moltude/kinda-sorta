@@ -18,12 +18,9 @@ $(function(){
 
 <!-- Images  -->
 <div id="container" class="masonry js-masonry">
-	<!-- {{ response.objects }} -->
-
 	{% for object in response.objects %}
 		<a  id="{{object.objNumber}}" href="{{object.objUrl}}" target="blank">
-			<img style='margin-bottom: 20px; border: 2px solid #333; border-color: hsla(0, 0%, 0%, 0.5); border-radius: 5px;' class='object' src="{{object.imgUrl}}" alt="" />
-         <!-- onError="this.onerror=''; this.style.visibility='hidden';" -->
+			<img style='margin-bottom: 20px; border: 2px solid #333; border-color: hsla(0, 0%, 0%, 0.5); border-radius: 5px;' class='object' src="{{object.imgUrl}}" alt="" onError="this.onerror=''; this.style.visibility='hidden';"/>
 		</a>
 	{% endfor %}
 </div>

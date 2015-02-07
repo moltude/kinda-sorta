@@ -87,28 +87,21 @@ def query(request):
 	try : 
 		ks = json.loads(request.POST.get('ks'))
 		wam = walters()
-
-		# Pass session variables 
-		# def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
-
 		# response = wam.getTestImages()
-
 		# BASE_OBJ values are SESSION
 		# KS_VALS are in ks
 
 		response = wam.getKindaSortaObjects(ks=ks,baseObj=request.session)
 
-		print ('QUERY RESP\n\n')
-		print (response)
-
 		t = loader.get_template('object_results.html')
 		c = RequestContext( request, { 'response': response })
+		
 		return HttpResponse(t.render(c))
 
 	except Exception as e:
-		print ("Exception thrown")
+		print ("Exception thrown in VIEW.QUERY")
 		print (e)
-		return redirect(request, 'error.html')
+		return None
 """
 render error page
 """

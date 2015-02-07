@@ -50,13 +50,18 @@ class walters():
 	Returns JSON object from Walters API
 	"""
 	def getObject(self, objectId):
-		url = self.walters_base_url + '/' + str(objectId) + '?' + 'apikey=' + self.api_key
 		try:
-			response = urlopen(url).read().decode("utf-8")
-		except HTTPError as e:
-			raise Exception('Unable to fetch object from ' + url)
-		data = json.loads(response)
-		return data['Data']
+			url = self.walters_base_url + '/' + str(objectId) + '?' + 'apikey=' + self.api_key
+			try:
+				response = urlopen(url).read().decode("utf-8")
+			except HTTPError as e:
+				raise Exception('Unable to fetch object from ' + url)
+			data = json.loads(response)
+			return data['Data']
+		except Exception as e: 
+			print ('ERROR -- getObject ' + str(objectId))
+			print (e)
+			return None
 
 	"""
 	There are several nested fields within the Walters API response which should be
@@ -126,29 +131,33 @@ class walters():
 	Passes nicely formed JSON back to VIEWS.QUERY() <--- see getTestImages
 	"""
 	def getKindaSortaObjects(self, ks, baseObj):
-		queryTerms = {
-			'ks_what': baseObj['title'] + ' ' + baseObj['objectName'],
-			'ks_how': baseObj['medium'],
-			'ks_who': baseObj['creators'],
-			'ks_where': baseObj['geography'],
-		}
+		try:
+			queryTerms = {
+				'ks_what': baseObj['title'] + ' ' + baseObj['objectName'],
+				'ks_how': baseObj['medium'],
+				'ks_who': baseObj['creators'],
+				'ks_where': baseObj['geography'],
+			}
+		except Exception as e:
+			print ('BAD balues in baseObj')
+			print (baseObj)
 
 		boosts = self.getBoostValues(ks=ks)
 
 		solr = corona()
 		# solr_response is a list of objectIds
-		solr_response = solr.ks_query(queryTerms, boosts=None)
+		try: 
+			solr_response = solr.ks_query(queryTerms, boosts=None)
+		except Exception as e:
+			print ('ERROR returned from ks_query')
+			print (e)
 
 		results = self.getImages(solr_response)
+
 		return results
 		
 	"""
 	Pulls in images from Walters API
-
-
-		
-
-		print "Elapsed Time: %ss" % (time.time() - start)
 	"""
 
 	def getImages(self, objectIds):
@@ -156,26 +165,29 @@ class walters():
 		    pages = executor.map(self.getObject, objectIds)
 
 		objects = []
-
 		for data in pages:
 			obj = {}
+			# if for some reason the object could not be returned then ignore and just continue
+			if data is None:
+				continue
+			# get the primary image
 			try:
-				# get the primary image
 				for image in data['Images']:
-					if image['IsPrimary'] is True:
-						obj['imgUrl'] = image['ImageURLs']['Large']	
+					if image['IsPrimary'] is True: obj['imgUrl'] = image['ImageURLs']['Large']	
 			except Exception as e:
 				print ("EROOR getting images")
-				print (e)
+				obj['imgUrl'] = ''
 
 			obj['objUrl'] = data['ResourceURL']
 			obj['objNumber'] = data['ObjectNumber']
 			objects.append(obj)
+		# return only data required to print objects
 		return {'objects': objects}
 	"""
 	Turn the text ks values into integers 
 	"""
 	def getBoostValues(self, ks):
+		
 		pass
 
 

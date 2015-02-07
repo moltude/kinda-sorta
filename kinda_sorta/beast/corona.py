@@ -82,10 +82,14 @@ class corona:
 	def ks_query(self, queryTerms, boosts): 
 		results = []
 
+		# TODO :: move some of these parameters into the 
+		# /select request handler
 		url = self.solrServer + 'select?q='\
-		+ 'ks_how:'+ quote_plus(queryTerms['ks_how']) \
-		+ '&wt=json&indent=true&fl=objectId&rows=25'
-		# + ' AND ks_what:' + quote_plus(queryTerms['ks_what']) \
+		+ 'ks_how:'+ queryTerms['ks_how'] \
+		+ ' OR ks_what:' + queryTerms['ks_what'] \
+		+ ' OR ks_who:' + queryTerms['ks_who'] \
+		+ ' OR ks_where:' + queryTerms['ks_where']
+
 		# comment out the boosts until implementation
 		# + '&qf=ks_how^' + boosts['ks_how'] \
 		# + '&qf=ks_what^' + boosts['ks_what'] \
@@ -101,7 +105,13 @@ class corona:
 			print (e)
 			return None
 
-		json_rsp = json.loads(response.read().decode("utf-8"))
+		try:
+			json_rsp = json.loads(response.read().decode("utf-8"))
+		except Exception as e:
+			print (e)
+			print('Exeption loading response json')
+			return None
+
 		# pull object ids out		
 		for doc in json_rsp['response']['docs']:
 			results.append(doc['objectId'])
