@@ -9,6 +9,8 @@ from urllib.parse import quote_plus
 from django.conf import settings
 from beast.corona import corona
 
+from concurrent import futures
+
 import json
 import os
 import random
@@ -134,10 +136,42 @@ class walters():
 		boosts = self.getBoostValues(ks=ks)
 
 		solr = corona()
+		# solr_response is a list of objectIds
 		solr_response = solr.ks_query(queryTerms, boosts=None)
-		return solr_response
+
+		results = self.getImages(solr_response)
+		return results
+		
+	"""
+	Pulls in images from Walters API
+
+
 		
 
+		print "Elapsed Time: %ss" % (time.time() - start)
+	"""
+
+	def getImages(self, objectIds):
+		with futures.ThreadPoolExecutor(max_workers=5) as executor:
+		    pages = executor.map(self.getObject, objectIds)
+
+		objects = []
+
+		for data in pages:
+			obj = {}
+			try:
+				# get the primary image
+				for image in data['Images']:
+					if image['IsPrimary'] is True:
+						obj['imgUrl'] = image['ImageURLs']['Large']	
+			except Exception as e:
+				print ("EROOR getting images")
+				print (e)
+
+			obj['objUrl'] = data['ResourceURL']
+			obj['objNumber'] = data['ObjectNumber']
+			objects.append(obj)
+		return {'objects': objects}
 	"""
 	Turn the text ks values into integers 
 	"""

@@ -80,28 +80,35 @@ class corona:
 
 	"""
 	def ks_query(self, queryTerms, boosts): 
-		url = self.solrServer + 'query?q='\
-		+ quote_plus('ks_how:'+ queryTerms['ks_how'] \
-		+ ' AND ks_what:' + quote_plus(queryTerms['ks_what']) \
-		+ '&wt=json&indent=true')
+		results = []
+
+		url = self.solrServer + 'select?q='\
+		+ 'ks_how:'+ quote_plus(queryTerms['ks_how']) \
+		+ '&wt=json&indent=true&fl=objectId&rows=50'
+		# + ' AND ks_what:' + quote_plus(queryTerms['ks_what']) \
 		# comment out the boosts until implementation
 		# + '&qf=ks_how^' + boosts['ks_how'] \
 		# + '&qf=ks_what^' + boosts['ks_what'] \
 		
+		print ("QUERY URL= " + url)
 		
 		try:
 			response = urllib.request.urlopen(url)
-			print ('SOLR RESPONSE: %s' % response.getcode())
 		except Exception as e: 
 			print ('Exception thrown fetching from Solr')
 			print (url)
 			# TODO :: Some stock query behavior and messaging so they get some results 
 			print (e)
 			return None
-		
+
+		json_rsp = json.loads(response.read().decode("utf-8"))
+		# pull object ids out		
+		for doc in json_rsp['response']['docs']:
+			results.append(doc['objectId'])
+
 		# The response from Solr should only the the ObjectIDs because I will need to requery for all 
 		# items to get images from Walters API
-		return None		
+		return results
 
 	"""
 	select?q=*%3A*&wt=json&indent=true
