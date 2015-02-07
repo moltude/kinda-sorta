@@ -5,6 +5,7 @@ from django.template import loader, Context, RequestContext, Template
 
 from beast.validater import validater
 from beast.walters import walters
+from beast.corona import corona
 
 import random
 import json
@@ -104,6 +105,10 @@ render error page
 def error(request):
 	return render(request, 'error.html')
 
+
+def solr(request):
+	solr = corona()
+	return HttpResponse('Returned: %s' % solr.ping() )
 
 
 

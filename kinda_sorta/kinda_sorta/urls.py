@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^results/$', views.results, name='results'),
     url(r'^error/$', views.error, name='error'),
     url(r'^query/$', views.query, name='query'),
+    url(r'^solr/$', views.solr, name='solr'),
 
 )
 

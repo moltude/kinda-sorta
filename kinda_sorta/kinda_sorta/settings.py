@@ -34,8 +34,7 @@ if HEROKU:
 
     # Static asset configuration
     STATIC_ROOT = 'static'
-    # STATIC_URL = '/static/'
-# 
+    STATIC_URL = '/static/' 
     # STATICFILES_DIRS = (
     #     os.path.join(BASE_DIR, 'static'),
     # )
@@ -114,10 +113,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'), # static is on root level
+    # os.path.join(BASE_DIR, 'static', 'javaScript), # static is on root level
     # '/Users/scottwilliams/Code/Python/kinda-sorta/site/kinda_sorta',
 )
 
