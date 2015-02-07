@@ -13,6 +13,14 @@ import random
 import string
 
 class corona:
+
+	# TODO pull from Heroku ENV var
+	HEROKU = bool(os.environ.get('ON_HEROKU', ''))
+	if HEROKU:
+		api_key = os.environ['SOLR_EC2']
+	if not HEROKU:
+		api_key = settings.API_KEYS['WALTERS_API_KEY']
+
 	solrServer = settings.SOLR_EC2
 
 	inst = None
