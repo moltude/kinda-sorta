@@ -22,8 +22,6 @@ class corona:
 	if not HEROKU:
 		solrServer = settings.SOLR_EC2
 
-	solrServer = settings.SOLR_EC2
-
 	inst = None
 	def __init__(self): 
 		pass
@@ -44,7 +42,7 @@ class corona:
 	Delete all the content from Solr 
 	"""
 	def deleteAll(self):
-		deleteRequest = 'http://localhost:8983/solr/kinda-sorta/update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true'
+		deleteRequest = self.solrServer + 'update?stream.body=%3Cdelete%3E%3Cquery%3E*:*%3C/query%3E%3C/delete%3E&commit=true'
 		pass
 	"""
 	"""
@@ -75,26 +73,33 @@ class corona:
 		id_objName: hard coding paramters to query against 
 
 	"""
-	def ks_query(self, id, mq, oq, mat_weight, objName_weight, mat_mm, objName_mm): 
+	def ks_query(self, id, ks_how, oq, ks_how_boost, ks_what_boost, mat_mm=None, objName_mm=None): 
 		url = self.solrServer + '/query?q='\
-		+ urllib.quote_plus('ks_how:'+ mq \
-		+ ' AND ks_what:' + oq) \
-		+ '&qf=ks_how^' + str(mat_weight) \
-		+ '&qf=ks_what^' + str(objName_weight) \
+		+ urllib.quote_plus('ks_how:'+ ks_how \
+		+ ' AND ks_what:' + ks_what) \
+		+ '&qf=ks_how^' + str(ks_how_boost) \
+		+ '&qf=ks_what^' + str(ks_what_boost) \
 		+ '&wt=json&indent=true'
 		
 		print (url)
-		
-		response = json.load(urllib.request.urlopen(url))
+		try :
+			response = json.load(urllib.request.urlopen(url))
+		except Exception as e: 
+			print ('Exception thrown fetching from Solr')
+			# TODO :: Some stock query behavior and messaging so they get some results 
 		
 		for docs in response['response']['docs']:
 			print ('MATERIAL: ' + docs['material'].encode('utf-8'))
 			print ('OBJECT NAME: '+ docs['objectName'].encode('utf-8'))
 			print ('--')
+
+		# The response from Solr should only the the ObjectIDs because I will need to requery for all 
+		# items to get images from Walters API
+		return response['response']['docs']
 		
 
 	"""
-	http://localhost:8983/solr/kinda-sorta/select?q=*%3A*&wt=json&indent=true
+	select?q=*%3A*&wt=json&indent=true
 	"""
 	def query(self, q): 
 		url = self.solrServer + '/select?q=*%3A*&wt=json&indent=true'
