@@ -27,8 +27,13 @@ class corona:
 		except Exception as e:
 			print(e)
 		
-
+	stopwords = ['a','an','and','are','as','at','be', 'but', 'by', 'for', 'if', 'in', 'into', 
+	'is', 'it', 'no', 'not', 'of', 'on', 'or','such', 'that', 'the', 'their', 'then', 'there', 
+	'these', 'they', 'this', 'to', 'was', 'will','with',]
 	inst = None
+
+	"""
+	"""
 	def __init__(self): 
 		pass
 
@@ -66,7 +71,21 @@ class corona:
 			print (e)
 			print (req.encode('utf-8'))
 		
-		## Begin using data like the following
+
+	"""
+	Since I am have zero luck just using straight boosting to change
+	my result sets, I think I need to alter the ontology a bit
+
+	Use the word_select() to pull in only a partial term set for each query
+
+
+	"""
+	def ks_query_param(self, qt, b): 
+		for q in qt:
+			print ('ORIG =' + qt[q])
+			print ('PARTIAL=' + self.word_select(qt[q], int(b[q])))
+			qt[q] = self.word_select(qt[q], int(b[q]))
+		return qt
 
 	"""
 	Bulldozed version of what I'd like to encapsulate in a RH or custom 
@@ -80,61 +99,25 @@ class corona:
 
 	"""
 	def ks_query(self, queryTerms, boosts): 
-		results = []
+		# result sets
+		results = {'numFound': None, 'docs': []}
+		# build query seperately
+		queryTerms = self.ks_query_param(qt=queryTerms, b=boosts)
 
 		# TODO :: move some of these parameters into the 
 		# /select request handler
 		url = self.solrServer + 'select?q=' \
-		+ quote_plus('query({!dismax qf=ks_where^' + boosts['ks_where'] + ' v='+ queryTerms['ks_where'] +'}') \
-		+ quote_plus(' AND {!dismax qf=ks_how^' + boosts['ks_how'] + ' v='+ queryTerms['ks_how'] +'})') \
-		+ quote_plus(' AND {!dismax qf=ks_what^' + boosts['ks_what'] + ' v='+ queryTerms['ks_what'] +'})') \
-		+ quote_plus(' AND {!dismax qf=ks_who^' + boosts['ks_who'] + ' v='+ queryTerms['ks_who'] +'})') \
+		+ queryTerms['ks_where'] + ' OR ' \
+		+ queryTerms['ks_how'] + ' OR ' \
+		+ queryTerms['ks_what'] + ' OR ' \
+		+ queryTerms['ks_who']  \
 		+ '&fl=score,objectId'
 
-		# + quote_plus('sum(' + boosts['ks_how'] +',query({!dismax qf=ks_how v='+ queryTerms['ks_how'] +'})') \
-		# + quote_plus(',' + boosts['ks_where'] +',query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'})') \
-		# + '&fl=score,objectId'
-		# + quote_plus(' sum(' + boosts['ks_what'] +',query({!dismax qf=ks_what v='+ queryTerms['ks_what'] +'}))') \
-		# + quote_plus(' sum(' + boosts['ks_who'] +',query({!dismax qf=ks_who v='+ queryTerms['ks_who'] +'}))') \
+		# + quote_plus('query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'}') \
+		# + quote_plus(' OR {!dismax qf=ks_how v='+ queryTerms['ks_how'] +'})') \
+		# + quote_plus(' OR {!dismax qf=ks_what v='+ queryTerms['ks_what'] +'})') \
+		# + quote_plus(' OR {!dismax qf=ks_who v='+ queryTerms['ks_who'] +'})') \
 		
-		
-
-		# + quote_plus('sum(' + boosts['ks_what'] +',query({!dismax qf=ks_what v='+ queryTerms['ks_what'] +'}))') \
-		# + quote_plus('sum(' + boosts['ks_where'] +',query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'}))') \
-		# + 'qf=ks_where^1e-10&fl=score,objectId' \
-
-				# + 'qf=ks_what^1e-10&' \
-				# + 'qf=ks_what^1e-10 ks_where^1e-10&' \
-
-
-
-		# + 'bf=sum(map(query($qwhat),1e-10,1e3,1,0),scale(query($qwhat),0,0.2))&' \
-		# + 'qwhat={!dismax qf=ks_what mm=1 ps=100 bf=1 pf=ks_what}' + queryTerms['ks_what']
-		"""
-		bf=sum(map(query($qwhat),1e-10,1e3,1,0),scale(query($qwhat),0,0.2))&
-		qwhat={!dismax qf=ks_what mm=1 ps=100 bf=1 pf=ks_what}' + queryTerms['ks_what'] \
-		"""
-
-
-		# + ' pow('+ boosts['ks_what'] +',query({!dismax ks_what='+ queryTerms['ks_what']+'}))' \
-		# + ' pow('+ boosts['ks_who'] +',query({!dismax ks_who='+ queryTerms['ks_who']+'}))' \
-		# + ' pow('+ boosts['ks_where'] +',query({!dismax ks_where='+ queryTerms['ks_where']+'}))'
-
-		# + queryTerms['ks_how'] \
-		# + ' ' + queryTerms['ks_what'] \
-		# + ' ' + quote_plus(queryTerms['ks_who']) \
-		# + ' ' + quote_plus(queryTerms['ks_where']) \
-		# + 
-
-		"""
-		# + '&qf=ks_how^' + boosts['ks_how'] \
-		# + ' ks_what^' + boosts['ks_what'] \
-		# + ' ks_who^' + boosts['ks_who'] \
-		# + ' ks_where^' + boosts['ks_where']
-
-		query(ks_how, default)
-		'query({!dismax ks_how='+ queryTerms['ks_how']+'})
-		"""
 
 		# print ("QUERY URL= " + url)
 		
@@ -151,19 +134,17 @@ class corona:
 		try:
 			json_rsp = json.loads(response.read().decode("utf-8"))
 		except Exception as e:
-			print (e)
 			print('Exeption loading response json')
+			print (e)
 			return None
 
-		print (json_rsp)
-
-		# pull object ids out		
+		# pull object ids out	
+		results['numFound'] = json_rsp['response']['numFound']	
 		for doc in json_rsp['response']['docs']:
-			results.append(doc['objectId'])
+			results['docs'].append(doc['objectId'])
 
 		# The response from Solr should only the the ObjectIDs because I will need to requery for all 
 		# items to get images from Walters API
-		print (results)
 		return results
 
 	"""
@@ -174,10 +155,14 @@ class corona:
 		result = urllib.request.urlopen('http://localhost:8983/solr/kinda-sorta/select?q=*%3A*&wt=json&indent=true').read()
 
 	def word_select(self, words, percent): 
-		words = self.clean_words(words)
+		# remove stop words
+
+		words = ' '.join([word for word in words.split() if word not in self.stopwords])
+
+		print ('words ' + words)
+		
 		subString = None
 		items = (words.split(' '))
-
 		t_sub = int(float((percent/100.0))*len(items))
 
 		# pick an item index
@@ -191,11 +176,6 @@ class corona:
 			return '*'
 		else:
 			return subString.strip()
-
-	def clean_words(self, words): 
-		exclude = set(string.punctuation)
-		table = string.maketrans("","")
-		return words.translate(table, string.punctuation)
 
 
 """

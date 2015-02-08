@@ -57,7 +57,7 @@ def results(request):
 	# This whole section seems a bit ridiculous but whatever..atm
 	# Store the values of the object in a Session 
 	replace_punctuation = str.maketrans(string.punctuation, ' '*len(string.punctuation))
-	
+		
 	request.session['title'] = flatData['Title'].translate(replace_punctuation)
 	request.session['medium'] = flatData["Medium"].translate(replace_punctuation)
 	request.session['objectName'] = flatData['ObjectName'].translate(replace_punctuation)
@@ -76,7 +76,6 @@ def results(request):
 			}
 
 	# renders stock result page
-	# return render(request, 'results.html', json_obj)
 	t = loader.get_template('results.html')
 	c = RequestContext(request, json_obj)
 	return HttpResponse(t.render(c))
@@ -89,6 +88,7 @@ def query(request):
 	try : 
 		ks = json.loads(request.POST.get('ks'))
 		wam = walters()
+		
 		# response = wam.getTestImages()
 		# BASE_OBJ values are SESSION
 		# KS_VALS are in ks
@@ -97,7 +97,7 @@ def query(request):
 
 		t = loader.get_template('object_results.html')
 		c = RequestContext( request, { 'response': response })
-		
+
 		return HttpResponse(t.render(c))
 
 	except Exception as e:

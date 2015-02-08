@@ -152,8 +152,9 @@ class walters():
 			print ('ERROR returned from ks_query')
 			print (e)
 
-		results = self.getImages(solr_response)
-		return results
+		
+		solr_response['docs'] = self.getImages(solr_response['docs'])
+		return solr_response
 		
 	"""
 	Pulls in images from Walters API
@@ -195,10 +196,10 @@ class walters():
 	def getBoostValues(self, ks):
 		# 'not at all' may need some re-thinking
 		ks_values = { 
-			'exactly': '10000', 
-			'pretty much': '1000', 
-			'kinda-sorta': '1', 
-			'A little': '.01',
+			'exactly': '100', 
+			'pretty much': '75', 
+			'kinda-sorta': '50', 
+			'A little': '25',
 			'not at all': '0',
 		}
 		for key in ks:
