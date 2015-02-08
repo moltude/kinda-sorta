@@ -10,14 +10,14 @@ This whole page probably could be cleaned up but for now it is functional
 	<h3>Found 1,853 objects that are kinda-sorta like the object you selected. These objects are 
 
 
-	<select name="objectNameDD" id="ddlID">
+	<select name="ks_what" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
 	like <u>{{ baseObj.objectName }}</u> and 
 
-	<select name="artistDD" id="ddlID">
+	<select name="ks_who" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
@@ -25,14 +25,14 @@ This whole page probably could be cleaned up but for now it is functional
 	like the creator, <u>{{ baseObj.artist }}</u>, and
 	<!-- <u>{{ baseObj.artist }}</u>  -->
 
-	<select name="geographyDD" id="ddlID">
+	<select name="ks_where" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
 	like its place of origin, <u>{{ baseObj.geography }}</u>, and 
 
-	<select name="materialDD" id="ddlID">
+	<select name="ks_how" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
@@ -41,13 +41,22 @@ This whole page probably could be cleaned up but for now it is functional
 
 	<br><br>
 	<!-- Over-ride the default width -->
-	<select name="magicDD" id="ddlID" style="width: 100px;">
-		<option value="1">All of the</option>
-		<option value="2">A lot</option>
-		<option selected value="3">A little</option>
-		<option value="3">No</option>
-	</select>
-	 magic was used.
-	 </h3>
+	<span style="float: left">
+		<select name="ks_magic" id="ddlID" style="width: 100px;">
+			<option value="1">All of the</option>
+			<option value="2">A lot</option>
+			<option selected value="3">A little</option>
+			<option value="3">No</option>
+		</select>
+		 magic was used.
+		 </h3>
+	 </span>
+
+	 <span style="width: 40%; display: inline-block; float:right;">
+	 	<form id='search' action="../results/" method="get">
+			<input class='search-box' autofocus="true" type="text" name="q" placeholder="Find something else">
+			<input type="submit" value='Search' />
+		</form>
+    </span>
 </span>
 </div>

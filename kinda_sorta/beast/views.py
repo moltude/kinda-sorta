@@ -9,7 +9,7 @@ from beast.corona import corona
 
 import random
 import json
-
+import string
 
 # Create your views here.
 
@@ -56,11 +56,13 @@ def results(request):
 
 	# This whole section seems a bit ridiculous but whatever..atm
 	# Store the values of the object in a Session 
-	request.session['title'] = flatData['Title']
-	request.session['medium'] = flatData["Medium"]
-	request.session['objectName'] = flatData['ObjectName']
-	request.session['creators'] = flatData["Creators"]
-	request.session['geography'] = flatData["Geographies"]
+	replace_punctuation = str.maketrans(string.punctuation, ' '*len(string.punctuation))
+	
+	request.session['title'] = flatData['Title'].translate(replace_punctuation)
+	request.session['medium'] = flatData["Medium"].translate(replace_punctuation)
+	request.session['objectName'] = flatData['ObjectName'].translate(replace_punctuation)
+	request.session['creators'] = flatData["Creators"].translate(replace_punctuation)
+	request.session['geography'] = flatData["Geographies"].translate(replace_punctuation)
 
 	json_obj = {"baseObj": 
 				{ 	"title":flatData['Title'],

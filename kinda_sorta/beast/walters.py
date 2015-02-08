@@ -147,13 +147,12 @@ class walters():
 		solr = corona()
 		# solr_response is a list of objectIds
 		try: 
-			solr_response = solr.ks_query(queryTerms, boosts=None)
+			solr_response = solr.ks_query(queryTerms=queryTerms, boosts=boosts)
 		except Exception as e:
 			print ('ERROR returned from ks_query')
 			print (e)
 
 		results = self.getImages(solr_response)
-
 		return results
 		
 	"""
@@ -185,10 +184,28 @@ class walters():
 		return {'objects': objects}
 	"""
 	Turn the text ks values into integers 
+
+	exactly
+	prety much
+	kinda-sorta
+	A little
+	not at all
+
 	"""
 	def getBoostValues(self, ks):
+		# 'not at all' may need some re-thinking
+		ks_values = { 
+			'exactly': '10000', 
+			'pretty much': '1000', 
+			'kinda-sorta': '1', 
+			'A little': '.01',
+			'not at all': '0',
+		}
+		for key in ks:
+			ks[key] = ks_values[ ks[key] ]
+		print (ks)
 		
-		pass
+		return ks
 
 
 

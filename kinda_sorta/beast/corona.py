@@ -84,19 +84,62 @@ class corona:
 
 		# TODO :: move some of these parameters into the 
 		# /select request handler
-		url = self.solrServer + 'select?q='\
-		+ 'ks_how:'+ queryTerms['ks_how'] \
-		+ ' OR ks_what:' + queryTerms['ks_what'] \
-		+ ' OR ks_who:' + queryTerms['ks_who'] \
-		+ ' OR ks_where:' + queryTerms['ks_where']
+		url = self.solrServer + 'select?q=' \
+		+ quote_plus('query({!dismax qf=ks_where^' + boosts['ks_where'] + ' v='+ queryTerms['ks_where'] +'}') \
+		+ quote_plus(' AND {!dismax qf=ks_how^' + boosts['ks_how'] + ' v='+ queryTerms['ks_how'] +'})') \
+		+ quote_plus(' AND {!dismax qf=ks_what^' + boosts['ks_what'] + ' v='+ queryTerms['ks_what'] +'})') \
+		+ quote_plus(' AND {!dismax qf=ks_who^' + boosts['ks_who'] + ' v='+ queryTerms['ks_who'] +'})') \
+		+ '&fl=score,objectId'
 
-		# comment out the boosts until implementation
-		# + '&qf=ks_how^' + boosts['ks_how'] \
-		# + '&qf=ks_what^' + boosts['ks_what'] \
+		# + quote_plus('sum(' + boosts['ks_how'] +',query({!dismax qf=ks_how v='+ queryTerms['ks_how'] +'})') \
+		# + quote_plus(',' + boosts['ks_where'] +',query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'})') \
+		# + '&fl=score,objectId'
+		# + quote_plus(' sum(' + boosts['ks_what'] +',query({!dismax qf=ks_what v='+ queryTerms['ks_what'] +'}))') \
+		# + quote_plus(' sum(' + boosts['ks_who'] +',query({!dismax qf=ks_who v='+ queryTerms['ks_who'] +'}))') \
 		
-		print ("QUERY URL= " + url)
+		
+
+		# + quote_plus('sum(' + boosts['ks_what'] +',query({!dismax qf=ks_what v='+ queryTerms['ks_what'] +'}))') \
+		# + quote_plus('sum(' + boosts['ks_where'] +',query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'}))') \
+		# + 'qf=ks_where^1e-10&fl=score,objectId' \
+
+				# + 'qf=ks_what^1e-10&' \
+				# + 'qf=ks_what^1e-10 ks_where^1e-10&' \
+
+
+
+		# + 'bf=sum(map(query($qwhat),1e-10,1e3,1,0),scale(query($qwhat),0,0.2))&' \
+		# + 'qwhat={!dismax qf=ks_what mm=1 ps=100 bf=1 pf=ks_what}' + queryTerms['ks_what']
+		"""
+		bf=sum(map(query($qwhat),1e-10,1e3,1,0),scale(query($qwhat),0,0.2))&
+		qwhat={!dismax qf=ks_what mm=1 ps=100 bf=1 pf=ks_what}' + queryTerms['ks_what'] \
+		"""
+
+
+		# + ' pow('+ boosts['ks_what'] +',query({!dismax ks_what='+ queryTerms['ks_what']+'}))' \
+		# + ' pow('+ boosts['ks_who'] +',query({!dismax ks_who='+ queryTerms['ks_who']+'}))' \
+		# + ' pow('+ boosts['ks_where'] +',query({!dismax ks_where='+ queryTerms['ks_where']+'}))'
+
+		# + queryTerms['ks_how'] \
+		# + ' ' + queryTerms['ks_what'] \
+		# + ' ' + quote_plus(queryTerms['ks_who']) \
+		# + ' ' + quote_plus(queryTerms['ks_where']) \
+		# + 
+
+		"""
+		# + '&qf=ks_how^' + boosts['ks_how'] \
+		# + ' ks_what^' + boosts['ks_what'] \
+		# + ' ks_who^' + boosts['ks_who'] \
+		# + ' ks_where^' + boosts['ks_where']
+
+		query(ks_how, default)
+		'query({!dismax ks_how='+ queryTerms['ks_how']+'})
+		"""
+
+		# print ("QUERY URL= " + url)
 		
 		try:
+			print (url)
 			response = urllib.request.urlopen(url)
 		except Exception as e: 
 			print ('Exception thrown fetching from Solr')
@@ -112,12 +155,15 @@ class corona:
 			print('Exeption loading response json')
 			return None
 
+		print (json_rsp)
+
 		# pull object ids out		
 		for doc in json_rsp['response']['docs']:
 			results.append(doc['objectId'])
 
 		# The response from Solr should only the the ObjectIDs because I will need to requery for all 
 		# items to get images from Walters API
+		print (results)
 		return results
 
 	"""
