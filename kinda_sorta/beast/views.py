@@ -63,6 +63,8 @@ def results(request):
 	request.session['objectName'] = flatData['ObjectName'].translate(replace_punctuation)
 	request.session['creators'] = flatData["Creators"].translate(replace_punctuation)
 	request.session['geography'] = flatData["Geographies"].translate(replace_punctuation)
+	request.session['keywords'] = flatData["Keywords"]
+	request.session['description'] = flatData["Description"]
 
 	json_obj = {"baseObj": 
 				{ 	"title":flatData['Title'],
@@ -72,6 +74,8 @@ def results(request):
 					"img":flatData["Images"][0]["ImageURLs"]["Large"],
 					"artist":flatData["Creators"],
 					"geography":flatData["Geographies"],
+					"keywords":flatData["Keywords"],
+					"description":flatData["Description"],
 				}
 			}
 
@@ -88,7 +92,7 @@ def query(request):
 	try : 
 		ks = json.loads(request.POST.get('ks'))
 		wam = walters()
-		
+
 		# response = wam.getTestImages()
 		# BASE_OBJ values are SESSION
 		# KS_VALS are in ks

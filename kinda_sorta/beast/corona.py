@@ -82,8 +82,10 @@ class corona:
 	"""
 	def ks_query_param(self, qt, b): 
 		for q in qt:
+			print ('Q=' + q)
 			print ('ORIG =' + qt[q])
 			print ('PARTIAL=' + self.word_select(qt[q], int(b[q])))
+
 			qt[q] = self.word_select(qt[q], int(b[q]))
 		return qt
 
@@ -106,12 +108,13 @@ class corona:
 
 		# TODO :: move some of these parameters into the 
 		# /select request handler
-		url = self.solrServer + 'select?q=' \
-		+ queryTerms['ks_where'] + ' OR ' \
-		+ queryTerms['ks_how'] + ' OR ' \
-		+ queryTerms['ks_what'] + ' OR ' \
-		+ queryTerms['ks_who']  \
-		+ '&fl=score,objectId'
+		url = self.solrServer + 'select?q=((' \
+		+ quote_plus('ks_where:' + queryTerms['ks_where'] + ') AND (') \
+		+ quote_plus('ks_how:' + queryTerms['ks_how'] + ') AND (') \
+		+ quote_plus('ks_how:' + queryTerms['ks_how'] + ') AND (') \
+		+ quote_plus('ks_who:' + queryTerms['ks_who']  +  ') OR (') \
+		+ quote_plus('ks_magic:' + queryTerms['ks_magic'])  \
+		+ ')&fl=score,objectId'
 
 		# + quote_plus('query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'}') \
 		# + quote_plus(' OR {!dismax qf=ks_how v='+ queryTerms['ks_how'] +'})') \
@@ -156,7 +159,6 @@ class corona:
 
 	def word_select(self, words, percent): 
 		# remove stop words
-
 		words = ' '.join([word for word in words.split() if word not in self.stopwords])
 
 		print ('words ' + words)

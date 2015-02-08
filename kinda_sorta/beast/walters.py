@@ -86,6 +86,10 @@ class walters():
 				geoTerms.append(geo['GeographyTerm'])
 			data['Geographies'] = self.prettyString(geoTerms)
 
+		# no more null values
+		for key in data:
+			if data[key] is None: data[key]=''
+
 		return data
 
 	"""
@@ -137,6 +141,7 @@ class walters():
 				'ks_how': baseObj['medium'],
 				'ks_who': baseObj['creators'],
 				'ks_where': baseObj['geography'],
+				'ks_magic': baseObj['keywords']
 			}
 		except Exception as e:
 			print ('BAD balues in baseObj')
@@ -152,8 +157,10 @@ class walters():
 			print ('ERROR returned from ks_query')
 			print (e)
 
-		
 		solr_response['docs'] = self.getImages(solr_response['docs'])
+		
+		print (solr_response['docs'])
+
 		return solr_response
 		
 	"""
@@ -201,6 +208,10 @@ class walters():
 			'kinda-sorta': '50', 
 			'A little': '25',
 			'not at all': '0',
+			'All of the': '5',
+			'A lot': '3',
+			'A little': '1',
+			'No': '0'
 		}
 		for key in ks:
 			ks[key] = ks_values[ ks[key] ]
