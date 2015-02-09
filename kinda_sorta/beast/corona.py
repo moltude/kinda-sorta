@@ -81,13 +81,21 @@ class corona:
 
 	"""
 	def ks_query_param(self, qt, b): 
-		for q in qt:
-			print ('Q=' + q)
-			print ('ORIG =' + qt[q])
-			print ('PARTIAL=' + self.word_select(qt[q], int(b[q])))
-
-			qt[q] = self.word_select(qt[q], int(b[q]))
-		return qt
+		try:
+			toDel = []
+			for q in qt:
+				if int(b[q]) == 0:
+					toDel.append(q)
+				else: 
+					qt[q] = self.word_select(qt[q], int(b[q]))
+			print ('toDel')
+			print (toDel)
+			for d in toDel: 
+				del qt[d]
+			return qt
+		except Exception as e: 
+			print ('Unable to parse params in ks_query_param()')
+			print (e)
 
 	"""
 	Bulldozed version of what I'd like to encapsulate in a RH or custom 
@@ -106,24 +114,17 @@ class corona:
 		# build query seperately
 		queryTerms = self.ks_query_param(qt=queryTerms, b=boosts)
 
-		# TODO :: move some of these parameters into the 
-		# /select request handler
-		url = self.solrServer + 'select?q=((' \
-		+ quote_plus('ks_where:' + queryTerms['ks_where'] + ') AND (') \
-		+ quote_plus('ks_how:' + queryTerms['ks_how'] + ') AND (') \
-		+ quote_plus('ks_how:' + queryTerms['ks_how'] + ') AND (') \
-		+ quote_plus('ks_who:' + queryTerms['ks_who']  +  ') OR (') \
-		+ quote_plus('ks_magic:' + queryTerms['ks_magic'])  \
-		+ ')&fl=score,objectId'
+		query = ''
+		for key in queryTerms:
+			query = query + '(' + quote_plus(key + '^' + boosts[key] 	+ ':' + queryTerms[key] + ') AND ') \
 
-		# + quote_plus('query({!dismax qf=ks_where v='+ queryTerms['ks_where'] +'}') \
-		# + quote_plus(' OR {!dismax qf=ks_how v='+ queryTerms['ks_how'] +'})') \
-		# + quote_plus(' OR {!dismax qf=ks_what v='+ queryTerms['ks_what'] +'})') \
-		# + quote_plus(' OR {!dismax qf=ks_who v='+ queryTerms['ks_who'] +'})') \
+		url = self.solrServer + 'select?q=(' + query + ')&fl=score,objectId'
 		
-
-		# print ("QUERY URL= " + url)
-		
+		print (url)
+		# + quote_plus('ks_where^' + boosts['ks_where'] 	+ ':' + queryTerms['ks_where'] + ') AND (') \
+		# + quote_plus('ks_how^' 	 + boosts['ks_how'] 	+ ':' + queryTerms['ks_how'] + ') AND (') \
+		# + quote_plus('ks_how^' 	 + boosts['ks_how'] 	+ ':' + queryTerms['ks_how'] + ') AND (') \
+		# + quote_plus('ks_who^' 	 + boosts['ks_who'] 	+ ':' + queryTerms['ks_who']  +  ') 
 		try:
 			print (url)
 			response = urllib.request.urlopen(url)
@@ -160,11 +161,13 @@ class corona:
 	def word_select(self, words, percent): 
 		# remove stop words
 		words = ' '.join([word for word in words.split() if word not in self.stopwords])
-
-		print ('words ' + words)
 		
 		subString = None
 		items = (words.split(' '))
+		
+		if len(items) < 4:
+			return words
+
 		t_sub = int(float((percent/100.0))*len(items))
 
 		# pick an item index
