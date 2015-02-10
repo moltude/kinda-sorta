@@ -61,6 +61,7 @@ select {
   line-height: normal;
 }
 
+
 .page-title {
 	font-family: Calibri;
 	font-size: 80px;
@@ -83,6 +84,7 @@ select {
 	position: absolute;
 	left: 25%;
 	top: 50%;
+	display: inline-block;
 }
 
 .search-box {
@@ -90,6 +92,7 @@ select {
 	height: 40px;
 	font-size: 28px;
 	vertical-align: middle;
+	display: inline-block;
 }
 
 input[type=submit] {
@@ -105,8 +108,9 @@ input[type=submit] {
 	background:#ccc; 
 	border:0 none;
     cursor:pointer;
-    /*-webkit-border-radius: 5px;*/
+    -webkit-border-radius: 5px;
     border-radius: 5px; 
+    display: inline;
 }
 
 h3 {
@@ -181,4 +185,3 @@ a:-webkit-any-link {
 	vertical-align: top;
 	text-align: right;
 }
-

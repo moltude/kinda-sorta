@@ -1,14 +1,21 @@
 
+
 <!-- KINDA-SORTA search box, centered vert and horz on page -->
-<form id='search' action="../results/" method="get">
+
 	<div class='page-center-title-div'>
 		<span class='page-center-span'>
 			<span class='page-title'>KINDA-SORTA</span>
 		</span>
 	</div>	
 	
-	<div class='page-center-div'>
-	    <input class='search-box' autofocus="true" type="text" name="q" placeholder="Enter a Walters object URL">
-	    <input type="submit" value='Search' />
-	</div>
-</form>
+<div class='page-center-div'>
+		<form id='search' action="../results/" method="get" >
+			<input class='search-box' autofocus="true" type="text" name="q" placeholder="Enter a Walters object URL"  />
+		    <input type="submit" value='Search' />
+		</form>
+		
+		<!-- TODO :: Figure out how to get these button to display side by side -->
+		<form id='random' action="../random/" method="get" >
+			<input type="submit" value='Or try a random object' />
+		</form>
+</div>

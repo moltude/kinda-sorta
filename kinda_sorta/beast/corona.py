@@ -70,6 +70,27 @@ class corona:
 		except Exception as e:
 			print (e)
 			print (req.encode('utf-8'))
+
+	"""
+	Get a random object out of the index
+	"""
+	def getRandom(self):
+		randNum = str(random.randrange( 500000 ))
+		url = self.solrServer + 'select?q=*%3A*&sort=random_' + randNum + '+asc&rows=1&wt=json&indent=true'
+		try:
+			response = urllib.request.urlopen(url)
+		except Exception as e: 
+			print ('Exception thrown fetching from Solr')
+			print (url)
+			# TODO :: Some stock query behavior and messaging so they get some results 
+			print (e)
+			return None
+		try:
+			json_rsp = json.loads(response.read().decode("utf-8"))
+		except Exception as e:
+			print (e)
+		
+		return json_rsp['response']['docs'][0]['objectId']
 		
 
 	"""
@@ -78,12 +99,10 @@ class corona:
 
 	Use the word_select() to pull in only a partial term set for each query
 
-
 	"""
 	def ks_query_param(self, qt, b): 
 		try:
 			toDel = []
-			
 			for q in qt:
 				if int(b[q]) == 0:
 					toDel.append(q)
@@ -94,7 +113,6 @@ class corona:
 				del qt[d]
 			
 			return qt
-
 		except Exception as e: 
 			print ('Unable to parse params in ks_query_param()')
 			print (e)
