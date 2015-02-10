@@ -119,7 +119,6 @@ input[type=submit] {
 	background:#ccc; 
 	border:0 none;
     cursor:pointer;
-    -webkit-border-radius: 5px;
     border-radius: 5px; 
     display: inline;
 }
@@ -195,4 +194,5 @@ a:-webkit-any-link {
 	width: 10%;
 	vertical-align: top;
 	text-align: right;
+}
 }
