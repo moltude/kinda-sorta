@@ -28,7 +28,7 @@
 				// Taken from 
 				// http://stackoverflow.com/questions/20091481/auto-resizing-the-select-element-according-to-selected-options-width
 		    	$("#width_tmp").html(this.options[e.target.selectedIndex].text);
-				$(this).width($("#width_tmp").width()); 
+				$(this).width($("#width_tmp").width()+5); 
 				/*
 				After changing one of the attributes; the Solr index should be requeried 
 				using the new values 
