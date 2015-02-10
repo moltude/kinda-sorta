@@ -83,16 +83,18 @@ class corona:
 	def ks_query_param(self, qt, b): 
 		try:
 			toDel = []
+			
 			for q in qt:
 				if int(b[q]) == 0:
 					toDel.append(q)
 				else: 
 					qt[q] = self.word_select(qt[q], int(b[q]))
-			print ('toDel')
-			print (toDel)
+			# remove the paramter
 			for d in toDel: 
 				del qt[d]
+			
 			return qt
+
 		except Exception as e: 
 			print ('Unable to parse params in ks_query_param()')
 			print (e)
@@ -114,17 +116,13 @@ class corona:
 		# build query seperately
 		queryTerms = self.ks_query_param(qt=queryTerms, b=boosts)
 
-		query = ''
+		query = []
 		for key in queryTerms:
-			query = query + '(' + quote_plus(key + '^' + boosts[key] 	+ ':' + queryTerms[key] + ') AND ') \
+			query.append('(' + key + ':' + quote_plus(queryTerms[key]) + ')')
 
-		url = self.solrServer + 'select?q=(' + query + ')&fl=score,objectId'
+		# + '^' + boosts[key]
+		url = self.solrServer + 'select?q=+(' + '+'.join(query) + ')&mm=100&fl=score,objectId'
 		
-		print (url)
-		# + quote_plus('ks_where^' + boosts['ks_where'] 	+ ':' + queryTerms['ks_where'] + ') AND (') \
-		# + quote_plus('ks_how^' 	 + boosts['ks_how'] 	+ ':' + queryTerms['ks_how'] + ') AND (') \
-		# + quote_plus('ks_how^' 	 + boosts['ks_how'] 	+ ':' + queryTerms['ks_how'] + ') AND (') \
-		# + quote_plus('ks_who^' 	 + boosts['ks_who'] 	+ ':' + queryTerms['ks_who']  +  ') 
 		try:
 			print (url)
 			response = urllib.request.urlopen(url)
@@ -159,17 +157,22 @@ class corona:
 		result = urllib.request.urlopen('http://localhost:8983/solr/kinda-sorta/select?q=*%3A*&wt=json&indent=true').read()
 
 	def word_select(self, words, percent): 
+		# return the exact phrase b/c that is what they asked for
+		if percent == 100: 
+			return '"' + words.strip() + '"'
+
 		# remove stop words
 		words = ' '.join([word for word in words.split() if word not in self.stopwords])
 		
 		subString = None
 		items = (words.split(' '))
-		
+
+		# if there are less than four words then don't drop anything
 		if len(items) < 4:
 			return words
 
-		t_sub = int(float((percent/100.0))*len(items))
 
+		t_sub = int(float((percent/100.0))*len(items))
 		# pick an item index
 		for x in range(0, t_sub):
 			if subString is None:

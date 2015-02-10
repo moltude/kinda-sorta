@@ -137,7 +137,7 @@ class walters():
 	def getKindaSortaObjects(self, ks, baseObj):
 		try:
 			queryTerms = {
-				'ks_what': baseObj['title'] + ' ' + baseObj['objectName'],
+				'ks_what': baseObj['objectName'],
 				'ks_how': baseObj['medium'],
 				'ks_who': baseObj['creators'],
 				'ks_where': baseObj['geography'],
@@ -158,9 +158,6 @@ class walters():
 			print (e)
 
 		solr_response['docs'] = self.getImages(solr_response['docs'])
-		
-		print (solr_response['docs'])
-
 		return solr_response
 		
 	"""
@@ -206,7 +203,7 @@ class walters():
 			'exactly': '100', 
 			'pretty much': '75', 
 			'kinda-sorta': '50', 
-			'A little': '25',
+			'a little': '25',
 			'not at all': '0',
 			'All of the': '5',
 			'A lot': '3',
