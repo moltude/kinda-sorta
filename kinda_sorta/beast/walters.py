@@ -187,24 +187,18 @@ class walters():
 			objects.append(obj)
 		# return only data required to print objects
 		return {'objects': objects}
+
 	"""
-	Turn the text ks values into integers 
-
-	exactly
-	prety much
-	kinda-sorta
-	A little
-	not at all
-
+	Turn the text ks values into integers
 	"""
 	def getBoostValues(self, ks):
 		# 'not at all' may need some re-thinking
 		ks_values = { 
-			'exactly': '100', 
-			'pretty much': '75', 
-			'kinda-sorta': '50', 
-			'a little': '25',
-			'not at all': '0',
+			'are exactly like': '100', 
+			# 'pretty much': '75', 
+			'are kinda-sorta like': '50', 
+			# 'a little': '25',
+			'might or might not be like': '0',
 			'All of the': '5',
 			'A lot': '3',
 			'A little': '1',
@@ -212,8 +206,7 @@ class walters():
 		}
 		for key in ks:
 			ks[key] = ks_values[ ks[key] ]
-		print (ks)
-		
+
 		return ks
 
 

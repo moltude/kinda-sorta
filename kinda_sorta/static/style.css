@@ -3,20 +3,23 @@
     outline: 0;
 }
 
-#ddlID {
-	width: 159px
+option {
+	text-align: center
 }
-#width_tmp{
- display : none;
+
+#ddlID {
+	text-align: center;
+	width: 268px;
+}
+#width_tmp {
+	display : none;
 }
 
 select {
     border: none;
     background: #F3F781;
-    /*margin-left: 5px;*/
-    /*margin-right: 5px;*/
-    padding-left: 7px;
-    padding-right: 7px;
+    padding-left: 5px;
+    padding-right: 5px;
     height: auto;
 	font-family: Calibri;
 	font-style: normal;

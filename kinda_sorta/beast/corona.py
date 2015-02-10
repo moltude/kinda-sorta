@@ -99,6 +99,8 @@ class corona:
 
 	Use the word_select() to pull in only a partial term set for each query
 
+	TODO :: I think the logic for this function is slightly backwards
+
 	"""
 	def ks_query_param(self, qt, b): 
 		try:

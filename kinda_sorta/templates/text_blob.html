@@ -7,42 +7,40 @@ This whole page probably could be cleaned up but for now it is functional
 -->
 <div style="clear:float">
 <span style="padding-left: 10px; margin: 10px; max-width:85%; line-height: 1.5">
-	<h3>Found {% include 'numFound.html' %} objects that are kinda-sorta like the object you selected. These objects are 
-
-
+	<h3>Found {% include 'numFound.html' %} objects that are kinda-sorta like the object you selected. These objects 
+	
 	<select name="ks_what" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
-
-	like <u>{{ baseObj.objectName }}</u> and 
+	
+	 <u>{{ baseObj.objectName }}</u> and 
 
 	<select name="ks_who" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
-	like the creator, <u>{{ baseObj.artist }}</u>, and
-	<!-- <u>{{ baseObj.artist }}</u>  -->
+	the creator, <u>{{ baseObj.artist }}</u>, and
 
 	<select name="ks_where" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
-	like its place of origin, <u>{{ baseObj.geography }}</u>, and 
+	its place of origin, <u>{{ baseObj.geography }}</u>, and 
 
 	<select name="ks_how" id="ddlID">
 		{% include 'options.html' %}
 	</select>
 	<span id="width_tmp"></span>
 
-	like what it is made of, <u>{{ baseObj.material }}</u>.
+	what it is made of, <u>{{ baseObj.material }}</u>.
 
 	<br><br>
 	<!-- Over-ride the default width -->
 	<span style="float: left">
-		<select name="ks_magic" id="ddlID" style="width: 46px;">
+		<select name="ks_magic" id="ddlID" style="width: 48px;">
 			<option value="1">All of the</option>
 			<option value="2">A lot</option>
 			<option value="3">A little</option>
