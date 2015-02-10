@@ -23,6 +23,8 @@ def index(request):
 	index = random.randint(0, len(bg_imgs)-1)
 	return render(request, 'index.html', {'bg':bg_imgs[index]} )
 
+def about(request):
+	return render(request, 'about.html')
 
 """
 This method was basically copeid and pased from results; 

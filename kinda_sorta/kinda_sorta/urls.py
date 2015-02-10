@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^query/$', views.query, name='query'),
     url(r'^solr/$', views.solr, name='solr'),
     url(r'^random/$', views.getRandomObject, name='random'),
+    url(r'^about/$', views.about, name='about'),
 
 )
 
