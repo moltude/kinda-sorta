@@ -1,9 +1,10 @@
 # kinda-sorta
-user defined recommender for museum objects 
+Kinda-Sorta is an alternative approach to resource discovery within a museum's collection. Rather than ask users what they are looking for, it starts with a single object and asks the user what aspects of that object are important to them. They can adjust how important those facets are and it will then suggest similar objects using those criteria (the algorithm is still under development). 
 
+The inspiration for this project came from previous work on Serendip-o-matic as well as discussions with colleagues about 'user driven relevancy''. 
 
-# Why? 
 Many museums provide some mechanism for users to see 'related' objects from an object page. These are valuable because they allow users to click through and explore the collection further. However, these approaches has several limitations which kinda-sorta seeks to solve. 
+
 
 Issues with existing approaches
 --------------------------------
@@ -15,9 +16,8 @@ Issues with existing approaches
 Improvements from kinda-sorta
 ------------------------------
 1. Multi-dimensional 
-2. Reflect my values
-3. More transparent
-4. Dynamic 
-5. Aggregate 
+2. Reflect the relative importance of one aspect over another
+3. Dynamic 
 
-
+# Status
+The project on not currently running on heroku because I needed to take the Solr server offline 
